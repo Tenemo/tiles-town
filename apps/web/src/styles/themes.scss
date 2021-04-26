@@ -1,0 +1,37 @@
+.theme-dark {
+    $light: #ffebcd;
+    $dark: #1E1E1E;
+
+    $primary: darken(rgb(246, 159, 29), 7%);
+    $primary-string: "rgb(246, 159, 29)"; //bootstrap4's hamburger
+    $secondary: rgb(50, 50, 50);
+    $primary-bg: $dark;
+    $links: lighten($primary, 20%);
+    $active: darken($primary, 15%);
+    @import 'global';
+    // body rules
+    background-color: $primary-bg;
+    font-family: $primary-font;
+    color: $primary;
+}
+
+.theme-light {
+    $light: rgb(255, 247, 233);
+    $dark: #1E1E1E;
+
+    $primary: rgb(56, 56, 56);
+    $primary-string: "rgb(56, 56, 56)"; //bootstrap4's hamburger
+    $secondary: rgb(199, 199, 199);
+    $primary-bg: $light;
+    $links: darken(rgb(246, 159, 29), 10%);
+    $active: darken(rgb(246, 159, 29), 25%);
+    @import 'global';
+    // body rules
+    background-color: $primary-bg;
+    font-family: $primary-font;
+    color: $primary;
+}
+
+body {
+    margin: 0px;
+}
