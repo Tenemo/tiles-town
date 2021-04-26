@@ -68,35 +68,6 @@ exports[`ContactPage matches snapshot 1`] = `
            /Tenemo
         </a>
       </h5>
-      <h5>
-        <a
-          href="mailto:piotr@piech.dev"
-        >
-          <FontAwesomeIcon
-            border={false}
-            className=""
-            fixedWidth={false}
-            flip={null}
-            icon={
-              Array [
-                "far",
-                "envelope",
-              ]
-            }
-            inverse={false}
-            listItem={false}
-            mask={null}
-            pull={null}
-            pulse={false}
-            rotation={null}
-            size={null}
-            spin={false}
-            symbol={false}
-            transform={null}
-          />
-           piotr@piech.dev
-        </a>
-      </h5>
     </div>
   </div>
 </section>
