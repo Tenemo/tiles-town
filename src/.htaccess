@@ -1,0 +1,12 @@
+Order deny,allow
+Allow from deny
+Allow from 127.0.0.1
+Allow from 188.127.7.96
+Allow from localhost
+
+RewriteEngine On  
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+RewriteRule ^ - [L]
+
+RewriteRule ^ /index.html [L]
