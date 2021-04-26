@@ -29,7 +29,7 @@ const NewGamePanel = ({ game, onNewGameClick, onChange, onRestartClick, loading 
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="playerName">Player name to show on the scoreboard, anything goes:</label>
+                    <label htmlFor="playerName">Player name to show on the scoreboard:</label>
                     <input
                         className="form-control"
                         onChange={onChange}

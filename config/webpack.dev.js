@@ -45,7 +45,7 @@ export default {
         // }),
         new HtmlWebpackPlugin({
             template: 'src/index.pug',
-            title: 'piech.dev',
+            title: 'Tiles Town',
             filename: 'index.html',
             inject: 'true',
         })
