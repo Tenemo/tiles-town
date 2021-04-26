@@ -8,15 +8,15 @@
 #### for later, maybe
 - fontawesome-react BLOAT :c import only used icons they said, tree-shaking they said, it'll be okay they said
 - reduce bundle.js size: import only parts of bootstrap? drop some polyfills? gzip? fontawesome, come on
-- npm cache has it out for me, no amount of reinstalls fix EPERM error, find some other solution, I shouldnt rimraf .cache on every start (or should I)
+- npm cache has it out for me, no amount of reinstalls fix EPERM error, find some other solution, I shouldn't rimraf .cache on every start (or should I)
 - prevent users from losing their game and score if the first request fails
-- make info panels pretty, hidden, dont display raw data
+- make info panels pretty, hidden, don't display raw data
 - client-side pretty form validation popups, also: disable zalgo
 - if the site ever grows to have more scss, they should be imported separately for each section, redo themes, I think it also messes up map files when viewing in browser
 - add FAQ? similar questions get asked all the time
 - flashing text only in dark mode, something to do with the colors, check different browsers
 - componentWillUnmount() cancel requests?
-- remember window position and scroll to it after theme change, to avoid jump on rerender, preferably loading overlay inbetween
+- remember window position and scroll to it after theme change, to avoid jump on re-render, preferably loading overlay in-between
 
 #### for much later and probably not
 - how to play modal pop-up, GIF with example

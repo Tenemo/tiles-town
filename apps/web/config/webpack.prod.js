@@ -63,8 +63,9 @@ export default {
             },
         }),
         new CopyWebpackPlugin([
-            { from: path.resolve(__dirname, '../src/static/'), to: 'static' },
-            { from: path.resolve(__dirname, '../src/.htaccess') }
+            { from: path.resolve(process.cwd(), 'src/static/'), to: 'static' },
+            { from: path.resolve(process.cwd(), 'src/.htaccess') },
+            { from: path.resolve(process.cwd(), '_redirects') },
         ])
     ],
     optimization: {
