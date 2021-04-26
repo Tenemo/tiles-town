@@ -14,7 +14,7 @@ const Header = ({ loading, changeTheme, darkTheme }) => {
                 <div className="collapse navbar-collapse" id="headerNavbar">
                     <ul className="navbar-nav mr-auto">
                         <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
-                            <NavLink to="/flip-tiles" className="nav-link">
+                            <NavLink to="/game" className="nav-link">
                                 Flip All Tiles
                             </NavLink>
                         </li>

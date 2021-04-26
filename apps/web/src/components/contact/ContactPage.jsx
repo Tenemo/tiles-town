@@ -16,11 +16,6 @@ const ContactPage = () => {
                             <FontAwesomeIcon icon={['fab', 'github']} /> /Tenemo
                         </a>
                     </h5>
-                    <h5>
-                        <a href="mailto:piotr@piech.dev">
-                            <FontAwesomeIcon icon={['far', 'envelope']} /> piotr@piech.dev
-                        </a>
-                    </h5>
                 </div>
             </div>
         </section>

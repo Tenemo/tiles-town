@@ -63,8 +63,8 @@ export class App extends React.Component {
                     <Route path="/" component={scrollUp} />
                     <Switch>
                         <Route path="/about" component={ContactPage} />
-                        <Route path="/flip-tiles" component={GamePage} />
-                        <Route render={() => <Redirect push to="/flip-tiles"/>} />
+                        <Route path="/game" component={GamePage} />
+                        <Route render={() => <Redirect push to="/game"/>} />
                     </Switch>
                 </div>
             </div>
