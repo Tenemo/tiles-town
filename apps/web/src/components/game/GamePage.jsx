@@ -11,13 +11,6 @@ import InfoPanels from './InfoPanels';
 import Tile from './Tile';
 
 export class GamePage extends React.Component {
-    // constructor(props) {
-    //     super(props);
-    //     // this.onMoveClick = this.onMoveClick.bind(this);
-    //     // this.onNewGameClick = this.onNewGameClick.bind(this);
-    //     // this.updateGameState = this.updateGameState.bind(this);
-    //     // this.restartBoard = this.restartBoard.bind(this);
-    // }
     onMoveClick = event => {
         let coords = event.target.getAttribute('coords');
         Promise.resolve(this.props.actions.makeMove(coords))
