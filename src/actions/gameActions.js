@@ -2,13 +2,11 @@ import * as types from './actionTypes';
 import { beginAjaxCall, ajaxCallError } from './ajaxStatusActions';
 import toastr from 'toastr';
 
-const api = 'https://serene-thicket-97123.herokuapp.com';
-
 export function newGame(newSize, easyMode, seed, previousId) {
     return dispatch => {
         dispatch(lockBoard());
         dispatch(beginAjaxCall());
-        return fetch(api + '/api/game/new', {
+        return fetch('/api/game/new', {
             timeout: 5000,
             method: 'post',
             headers: {
@@ -79,7 +77,7 @@ export function winGame(game) {
     return dispatch => {
         //console.log('winGame() action');
         dispatch(beginAjaxCall());
-        return fetch(api + '/api/game/' + game.gameId, {
+        return fetch('/api/game/' + game.gameId, {
             timeout: 20000,
             method: 'put',
             headers: {
@@ -143,7 +141,7 @@ export function getHighScores() {
     return dispatch => {
         //console.log('getHighScores() action');
         dispatch(beginAjaxCall());
-        return fetch(api + '/api/game/highScores', {
+        return fetch('/api/game/highScores', {
             timeout: 5000,
             method: 'get'
         })
