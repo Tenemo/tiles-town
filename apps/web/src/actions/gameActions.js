@@ -2,6 +2,8 @@ import * as types from './actionTypes';
 import { beginAjaxCall, ajaxCallError } from './ajaxStatusActions';
 import toastr from 'toastr';
 
+// const api = 'https://api.tiles.town';
+
 export function newGame(newSize, easyMode, seed, previousId) {
     return dispatch => {
         dispatch(lockBoard());
