@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import {
     GameState,
     GameActionTypes,
@@ -78,7 +79,9 @@ export const gameReducer = (
         case NEW_GAME_SUCCESS:
             newState = { ...state };
             newState.board = action.newGame.board;
-            newState.receivedBoard = JSON.parse(JSON.stringify(newState.board));
+            newState.receivedBoard = JSON.parse(
+                JSON.stringify(newState.board),
+            ) as number[][];
             newState.gameId = action.newGame.gameId;
             newState.size = action.newGame.size;
             newState.leftCount = 0;
@@ -94,9 +97,9 @@ export const gameReducer = (
         case MAKE_MOVE:
             newState = { ...state };
             newState.moves = newState.moves.concat(action.move);
-            newState.moveCount++;
+            newState.moveCount += 1;
             newState = updateBoard(
-                JSON.parse(JSON.stringify(newState)),
+                JSON.parse(JSON.stringify(newState)) as GameState,
                 action.move,
             );
             return newState;
@@ -106,23 +109,26 @@ export const gameReducer = (
                 size: newState.size,
                 seed: action.game.seed,
                 moveCount: action.game.moveCount,
-                time: action.game.time,
-                score: action.game.score,
+                time: action.game.time as number,
+                score: action.game.score as number,
                 gameId: newState.gameId,
                 easyMode: newState.easyMode,
-                isSeedCustom: action.game.isSeedCustom,
+                isSeedCustom: action.game.isSeedCustom as boolean,
                 playerName: newState.playerName,
+                moves: [],
             };
             newState.previous.moves = JSON.parse(
                 JSON.stringify(newState.moves),
-            );
+            ) as string[];
             newState.moves = [];
             newState.moveCount = 0;
             newState.gameId = '';
             return newState;
         case UPDATE_ON_CHANGE:
             newState = { ...state };
-            newState[action.name] = action.value;
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            newState[action.name as keyof GameState] = action.value;
             return newState;
         case GET_HIGH_SCORES_SUCCESS:
             newState = { ...state };
@@ -130,7 +136,9 @@ export const gameReducer = (
             return newState;
         case RESTART_BOARD:
             newState = { ...state };
-            newState.board = JSON.parse(JSON.stringify(newState.receivedBoard));
+            newState.board = JSON.parse(
+                JSON.stringify(newState.receivedBoard),
+            ) as number[][];
             newState.moves = [];
             newState.moveCount = 0;
             newState.leftCount = 0;

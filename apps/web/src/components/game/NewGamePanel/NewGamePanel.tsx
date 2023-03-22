@@ -1,4 +1,7 @@
-import React, { ReactElement } from 'react';
+// TODO: Rewrite the inputs to be inside labels
+/* eslint-disable jsx-a11y/label-has-associated-control */
+
+import React, { ReactElement, MouseEvent, ChangeEvent } from 'react';
 
 import styles from './newGamePanel.scss';
 
@@ -7,9 +10,11 @@ import { GameState } from 'store/game/gameTypes';
 
 type Props = {
     game: GameState;
-    onNewGameClick: () => void;
-    onRestartClick: () => void;
-    updateGameState: () => void;
+    onNewGameClick: (event: MouseEvent<HTMLElement>) => void;
+    onRestartClick: (event: MouseEvent<HTMLElement>) => void;
+    updateGameState: (
+        event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>,
+    ) => void;
     loading: boolean;
 };
 
@@ -24,11 +29,13 @@ const NewGamePanel = ({
     for (
         let i = gameClientConfig.minSize;
         i < gameClientConfig.maxSize + 1;
-        i++
+        i += 1
     ) {
         selectOptions.push(
             <option key={i} value={i}>
                 {i}
+                {/* // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                @ts-ignore */}
                 {i === 6 && ' - suggested'}
             </option>,
         );
@@ -58,7 +65,8 @@ const NewGamePanel = ({
                     </label>
                     <input
                         className="form-control"
-                        maxLength="32"
+                        id="playerName"
+                        maxLength={32}
                         name="playerName"
                         onChange={updateGameState}
                         placeholder="anonymous"
@@ -70,6 +78,7 @@ const NewGamePanel = ({
                     <label htmlFor="newSize">Board size: </label>
                     <select
                         className="form-control"
+                        id="newSize"
                         name="newSize"
                         onChange={updateGameState}
                         value={game.newSize}
@@ -98,7 +107,7 @@ const NewGamePanel = ({
                     </label>
                     <input
                         className="form-control"
-                        maxLength="256"
+                        maxLength={256}
                         name="seed"
                         onChange={updateGameState}
                         placeholder="myBoardToShareWithFriends"

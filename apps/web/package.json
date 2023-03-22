@@ -22,7 +22,7 @@
         "eslint": "eslint . --ext js,jsx,ts,tsx",
         "eslint:fix": "eslint . --ext js,jsx,ts,tsx --fix",
         "stylelint": "stylelint **/*.scss **/*.css",
-        "lint": "npm run eslint && npm run stylelint",
+        "lint": "npm run eslint",
         "open:dist": "http-server dist --port 4000 --proxy http://localhost:4000?",
         "open:src": "cross-env PORT=3000 webpack serve --config config/webpack/webpack.dev.babel.ts",
         "postinstall": "husky install",

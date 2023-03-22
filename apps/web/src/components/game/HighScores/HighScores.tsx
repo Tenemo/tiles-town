@@ -1,10 +1,10 @@
 import { faTrophy, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { ReactElement, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 
 import styles from './highScores.scss';
 
+import { useSelector, useDispatch } from 'store';
 import { getHighScores as fetchHighScores } from 'store/game/gameActions';
 import { getHighScores } from 'store/game/gameSelectors';
 
@@ -13,7 +13,7 @@ const HighScores = (): ReactElement => {
     const highScores = useSelector(getHighScores);
 
     useEffect(() => {
-        dispatch(fetchHighScores());
+        void dispatch(fetchHighScores());
     }, [dispatch]);
 
     return (

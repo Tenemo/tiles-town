@@ -1,6 +1,6 @@
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { ReactElement, MouseEvent, KeyboardEvent } from 'react';
+import React, { ReactElement, MouseEvent, ChangeEvent } from 'react';
 
 import Board from './Board';
 import styles from './game.scss';
@@ -17,7 +17,6 @@ import {
     restartBoard,
 } from 'store/game/gameActions';
 import { getGame } from 'store/game/gameSelectors';
-import { GameState } from 'store/game/gameTypes';
 
 export const Game = (): ReactElement => {
     const dispatch = useDispatch();
@@ -38,17 +37,21 @@ export const Game = (): ReactElement => {
             newGame(game.newSize, game.easyMode, game.seed, game.gameId),
         );
     };
-    const updateGameState = (event: KeyboardEvent<HTMLInputElement>): void => {
-        const { name } = event.target;
-        let value;
-        value =
-            event.target.type == 'checkbox'
-                ? event.target.checked
-                : event.target.value;
-        dispatch(updateOnChange(name, value));
+    const updateGameState = (
+        event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>,
+    ): void => {
+        const { name } = event.currentTarget;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const value =
+            event.currentTarget.type === 'checkbox'
+                ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  event.currentTarget?.checked
+                : event.currentTarget?.value;
+        dispatch(updateOnChange(name, value as string));
     };
 
-    const onRestartClick = (event): void => {
+    const onRestartClick = (event: MouseEvent<HTMLElement>): void => {
         event.preventDefault();
         dispatch(restartBoard());
     };

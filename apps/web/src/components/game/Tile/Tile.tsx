@@ -1,8 +1,8 @@
-// TODO: remove
+// TODO: remove the disables
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-import React, { ReactElement } from 'react';
+import React, { ReactElement, MouseEvent } from 'react';
 
 import styles from './tile.scss';
 
@@ -10,9 +10,9 @@ import { numToAlpha } from 'utils/helpers';
 
 type Props = {
     type: number;
-    coords: [number, number];
-    size: number;
-    onMoveClick?: () => void;
+    coords: [number, number] | [number];
+    size: number | string;
+    onMoveClick?: (event: MouseEvent<HTMLElement>) => void;
     isDisabled: boolean;
 };
 
@@ -37,7 +37,8 @@ const Tile = ({
                 return styles.active;
         }
     })();
-    const alphanumericCoords = numToAlpha(coords, size, type);
+    const numSize = typeof size === 'number' ? size : parseInt(size, 10);
+    const alphanumericCoords = numToAlpha(coords, numSize, type);
     return (
         <div
             className={`${styles.tile} ${
