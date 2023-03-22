@@ -1,0 +1,16 @@
+.highScores {
+    overflow-x: auto;
+    table {
+        width: 100%;
+        thead > tr {
+            border-bottom: 2px var(--primary) solid;
+        }
+        tr {
+            border-top: 1px var(--secondary) solid;
+        }
+        td {
+            padding: 3px;
+            padding-right: 8px;
+        }
+    }
+}
