@@ -1,0 +1,91 @@
+.tile {
+    font-size: 2vh;
+    max-width: 50px;
+    width: 100%;
+    margin: 1px;
+    font-size: 14px;
+    perspective: 1000px;
+    user-select: none;
+    .tileInside {
+        padding-top: 100%;
+        width: 100%;
+        transition: 0.25s;
+        transform-style: preserve-3d;
+        position: relative;
+        border-radius: 5%;
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    }
+    .front,
+    .back {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        backface-visibility: hidden;
+        > span {
+            pointer-events: none;
+        }
+    }
+    .front {
+        transform: rotateY(0deg);
+    }
+    .back {
+        transform: rotateY(180deg);
+    }
+    &.active {
+        .tileInside {
+            background-color: var(--primary);
+            color: var(--primary);
+            cursor: pointer;
+            &:focus {
+                outline: none;
+                box-shadow: none;
+            }
+            @media (hover: hover) {
+                &:hover {
+                    background-color: var(--primary-light);
+                    color: var(--secondary);
+                }
+            }
+        }
+    }
+    &.flipped {
+        .tileInside {
+            transform: rotateY(180deg);
+            background-color: var(--secondary);
+            color: var(--secondary);
+            cursor: pointer;
+            &:focus {
+                outline: none;
+                box-shadow: none;
+            }
+            @media (hover: hover) {
+                &:hover {
+                    background-color: var(--secondary-light);
+                    color: var(--primary);
+                }
+            }
+        }
+    }
+    &.inactive {
+        visibility: hidden;
+    }
+    &.disabled {
+        .tileInside {
+            pointer-events: none;
+            transition: none !important;
+        }
+    }
+    &.coords {
+        .front {
+            background-color: none;
+        }
+        .back {
+            visibility: hidden;
+        }
+    }
+}

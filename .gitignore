@@ -1,33 +1,17 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-
-# Dependency directories
+# NPM
 node_modules/
-jspm_packages/
+*.tgz
+npm-debug.log
+.tmp/
+sh.exe.stackdump
+debug.log
 
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Optional REPL history
-.node_repl_history
-
-# misc
-.DS_Store
-.env
-package-lock.json
-
-# testing
-coverage/
-
-# production
+# Build
 dist/
 
-# temporary and local development files
-dev/
-.vscode/
+# Testing
+coverage/
+
+# Miscellaneous
+.DS_Store
 temp/
