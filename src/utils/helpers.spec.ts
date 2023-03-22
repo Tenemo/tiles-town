@@ -1,4 +1,4 @@
-import { letterToInt, intToLetter, alphaToNum, numToAlpha } from './helpers';
+import { letterToInt, intToLetter } from './helpers';
 
 describe('helpers', () => {
     describe(`letterToInt`, () => {
@@ -21,14 +21,4 @@ describe('helpers', () => {
             expect(intToLetter(701)).toEqual('ZZ');
         });
     });
-    // describe(`alphaToNum`, () => {
-    //     it('return numeric notation when given alphanumeric ', () => {
-    //         expect(alphaToNum()).toEqual();
-    //     });
-    // });
-    // describe(`numToAlpha`, () => {
-    //     it('return alphanumeric notation when given numeric', () => {
-    //         expect(numToAlpha()).toEqual();
-    //     });
-    // });
 });

@@ -51,7 +51,7 @@ export const alphaToNum = (move: string, size: number): [number, number] => {
  * Converts numeric notation to alphanumeric
  */
 export const numToAlpha = (
-    coords: [number, number],
+    coords: [number, number] | [number],
     size: number,
     type: number,
 ): string => {
@@ -62,7 +62,7 @@ export const numToAlpha = (
         result = intToLetter(coords[0]);
     } else {
         const alphanumericCoords = [];
-        alphanumericCoords[1] = intToLetter(coords[1]);
+        alphanumericCoords[1] = coords[1] ? intToLetter(coords[1]) : '';
         alphanumericCoords[0] = coords[0] + size - coords[0] * 2;
         result = `${alphanumericCoords[1]}${alphanumericCoords[0]}`;
     }

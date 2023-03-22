@@ -40,6 +40,9 @@ export type GameState = {
     moveCount: number;
     moves: string[];
     seed: string;
+    time?: number;
+    score?: number;
+    isSeedCustom?: boolean;
     easyMode: boolean;
     highScores: HighScore[];
     isDisabled: boolean;

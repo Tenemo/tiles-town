@@ -12,7 +12,7 @@ const Panel = ({ game }: Props): ReactElement => {
     return (
         <div className={styles.infoPanels}>
             <div className="simpleBox">
-                {game.moveCount != null && game.moveCount != 0 && (
+                {game.moveCount != null && game.moveCount !== 0 && (
                     <p>Move count: {game.moveCount}</p>
                 )}
             </div>
