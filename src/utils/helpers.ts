@@ -62,7 +62,8 @@ export const numToAlpha = (
         result = intToLetter(coords[0]);
     } else {
         const alphanumericCoords = [];
-        alphanumericCoords[1] = coords[1] ? intToLetter(coords[1]) : '';
+        alphanumericCoords[1] =
+            typeof coords[1] === 'number' ? intToLetter(coords[1]) : '';
         alphanumericCoords[0] = coords[0] + size - coords[0] * 2;
         result = `${alphanumericCoords[1]}${alphanumericCoords[0]}`;
     }
