@@ -1,5 +1,3 @@
-// TODO: fix this, there are actually no errors locally, only on Netlify
-/* eslint-disable import/order, import/no-unresolved */
 import React, { Component, ReactElement } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { connect } from 'react-redux';
@@ -11,9 +9,6 @@ import 'fonts/RobotoMono-Regular.woff';
 
 import styles from './app.scss';
 
-// TODO: tsc bugged on Netlify for some reason :C locally zero issues
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import Game from 'components/Game';
 import Header from 'components/Header';
 import NotFound from 'components/NotFound';
