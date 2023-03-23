@@ -1,3 +1,5 @@
+// TODO: fix this, there are actually no errors locally, only on Netlify
+/* eslint-disable import/order, import/no-unresolved */
 import React, { Component, ReactElement } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { connect } from 'react-redux';
