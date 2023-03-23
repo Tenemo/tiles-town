@@ -132,7 +132,7 @@ module.exports = {
             },
         ],
         '@typescript-eslint/explicit-module-boundary-types': ERROR,
-        '@typescript-eslint/no-unused-vars': ERROR,
+        '@typescript-eslint/no-unused-vars': OFF, // duplicate of ts(6133)
         '@typescript-eslint/no-use-before-define': ERROR,
         '@typescript-eslint/unbound-method': ERROR,
         '@typescript-eslint/no-shadow': [ERROR],
