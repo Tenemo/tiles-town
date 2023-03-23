@@ -46,7 +46,7 @@ export class App extends Component<Props> {
         const { appTheme } = this.props;
         const classNames = `${styles.app} theme-${appTheme}`;
         return (
-            <div className={classNames}>
+            <main className={classNames}>
                 <Helmet>
                     <title>tiles.town</title>
                 </Helmet>
@@ -67,7 +67,7 @@ export class App extends Component<Props> {
                         </Routes>
                     </>
                 )}
-            </div>
+            </main>
         );
     }
 }
