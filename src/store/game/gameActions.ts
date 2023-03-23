@@ -20,9 +20,9 @@ import {
 import { CommonDispatch, RootState } from 'store/types';
 import request from 'utils/request';
 
-// const apiUrl = process.env.NODE_ENV === 'development' ? 'https://api.tiles.town' : '';
-
-const apiUrl = 'http://localhost:8080';
+const apiUrl =
+    process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : '';
+// https://api.tiles.town
 
 export const requestSuccess = (): GameActionTypes => ({
     type: GAME_REQUEST_SUCCESS,
