@@ -1,7 +1,5 @@
 ## Tiles Town
 
-#### Deployment status
-
 [![Netlify Status](https://api.netlify.com/api/v1/badges/e376a228-9575-47c8-bafa-1493adaee126/deploy-status)](https://app.netlify.com/sites/tiles-town/deploys)
 
 [tiles.town](https://tiles.town)
