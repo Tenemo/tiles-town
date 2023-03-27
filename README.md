@@ -1,10 +1,12 @@
 ## Tiles Town
 
-### TODO
+### Deployment Status
 
--   favicon
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e376a228-9575-47c8-bafa-1493adaee126/deploy-status)](https://app.netlify.com/sites/tiles-town/deploys)
 
-#### for later, maybe
+[https://tiles.town](https://tiles.town)
+
+#### TODO for later, maybe
 
 -   reduce bundle.js size: import only parts of bootstrap? drop some polyfills? gzip? fontawesome, come on
 -   prevent users from losing their game and score if the first request fails
@@ -15,7 +17,7 @@
 -   remember window position and scroll to it after theme change, to avoid jump on re-render, preferably loading overlay in-between
 -   fontawesome-react BLOAT, import only used icons they said, tree-shaking they said, it'll be okay they said
 
-#### for much later and probably not
+#### TODO for much later and probably not
 
 -   how to play modal pop-up, GIF with example
 -   board max. height for wide display and big board sizes (not sure if it's a good change or having big tiles and scrolling down/up is actually better)
