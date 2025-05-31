@@ -4,21 +4,4 @@
 
 [tiles.town](https://tiles.town)
 
-#### TODO for later, maybe
-
--   reduce bundle.js size: import only parts of bootstrap? drop some polyfills? gzip? fontawesome, come on
--   prevent users from losing their game and score if the first request fails
--   make info panels pretty, hidden, don't display raw data
--   client-side pretty form validation popups
--   disable zalgo
--   flashing text only in dark mode, something to do with the colors, check different browsers
--   remember window position and scroll to it after theme change, to avoid jump on re-render, preferably loading overlay in-between
--   fontawesome-react BLOAT, import only used icons they said, tree-shaking they said, it'll be okay they said
-
-#### TODO for much later and probably not
-
--   how to play modal pop-up, GIF with example
--   board max. height for wide display and big board sizes (not sure if it's a good change or having big tiles and scrolling down/up is actually better)
--   option to show more high scores, show highlighted row with last game played to see where exactly the user placed
--   tune down score size-based scaling at bigger sizes? or just split scores by board size and ditch the size-based algorithm altogether
--   fancy loading icon, overlay elements during loading
+Puzzle game with a global scoreboard requiring you to flip all tiles to the same side. Built ages ago in jQuery as a toy project to learn JavaScript better, then rewritten in 2016-ish to learn React + Redux, more recently rewritten to TypeScript.
