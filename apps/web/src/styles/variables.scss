@@ -1,0 +1,41 @@
+:root {
+    --light: #ffebcd;
+    --dark: #1e1e1e;
+
+    // Dark theme
+    --dark-primary: #{darken(rgb(246, 159, 29), 7%)};
+    --dark-primary-light: #{lighten(darken(rgb(246, 159, 29), 7%), 20%)};
+    --dark-primary-string: "rgb(246, 159, 29)"; //bootstrap4's hamburger
+    --dark-secondary: rgb(70, 70, 70);
+    --dark-secondary-light: #{lighten(rgb(70, 70, 70), 20%)};
+    --dark-bg: var(--dark);
+    --dark-links: var(--dark-primary-light);
+    --dark-active: #{darken(darken(rgb(246, 159, 29), 7%), 15%)};
+
+    // Light theme
+    --light-primary: rgb(56, 56, 56);
+    --light-primary-light: #{lighten(rgb(56, 56, 56), 20%)};
+    --light-primary-string: "rgb(56, 56, 56)"; //bootstrap4's hamburger
+    --light-secondary: rgb(199, 199, 199);
+    --light-secondary-light: #{lighten(rgb(199, 199, 199), 20%)};
+    --light-bg: var(--light);
+    --light-links: #{darken(rgb(246, 159, 29), 10%)};
+    --light-active: #{darken(rgb(246, 159, 29), 25%)};
+
+    // Current, default to dark
+    --primary: var(--dark-primary);
+    --primary-light: var(--dark-primary-light);
+    --primary-string: var(--dark-primary-string);
+    --secondary: var(--dark-secondary);
+    --secondary-light: var(--dark-secondary-light);
+    --bg: var(--dark-bg);
+    --links: var(--dark-links);
+    --active: var(--dark-active);
+
+    // Bootstrap
+    --bs-btn-disabled-bg: var(--primary);
+    --bs-btn-bg: var(--primary);
+    --bs-btn-active-bg: var(--primary);
+    --bs-btn-active-border-color: var(--primary);
+    --bs-btn-active-color: var(--primary);
+}
