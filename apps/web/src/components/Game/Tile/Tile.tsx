@@ -1,7 +1,3 @@
-// TODO: remove the disables
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-
 import { ReactElement, MouseEvent } from 'react';
 
 import styles from './tile.module.scss';
@@ -23,6 +19,7 @@ const Tile = ({
     onMoveClick,
     isDisabled,
 }: Props): ReactElement => {
+    const isInteractive = !isDisabled && (type === 0 || type === 1);
     const typeClass = ((): string => {
         switch (type) {
             case 0:
@@ -46,24 +43,59 @@ const Tile = ({
             } ${typeClass}`}
         >
             <div className={styles.tileInside}>
-                <div
-                    className={styles.front}
-                    data-coords={alphanumericCoords}
-                    onClick={onMoveClick}
-                >
-                    <span className={`${styles.coords} d-none d-sm-block`}>
-                        {alphanumericCoords}
-                    </span>
-                </div>
-                <div
-                    className={styles.back}
-                    data-coords={alphanumericCoords}
-                    onClick={onMoveClick}
-                >
-                    <span className={`${styles.coords} d-none d-sm-block`}>
-                        {alphanumericCoords}
-                    </span>
-                </div>
+                {isInteractive ? (
+                    <>
+                        <button
+                            aria-label={`Toggle tile ${alphanumericCoords}`}
+                            className={styles.front}
+                            data-coords={alphanumericCoords}
+                            onClick={onMoveClick}
+                            type="button"
+                        >
+                            <span
+                                className={`${styles.coords} d-none d-sm-block`}
+                            >
+                                {alphanumericCoords}
+                            </span>
+                        </button>
+                        <button
+                            aria-label={`Toggle tile ${alphanumericCoords}`}
+                            className={styles.back}
+                            data-coords={alphanumericCoords}
+                            onClick={onMoveClick}
+                            type="button"
+                        >
+                            <span
+                                className={`${styles.coords} d-none d-sm-block`}
+                            >
+                                {alphanumericCoords}
+                            </span>
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <div
+                            className={styles.front}
+                            data-coords={alphanumericCoords}
+                        >
+                            <span
+                                className={`${styles.coords} d-none d-sm-block`}
+                            >
+                                {alphanumericCoords}
+                            </span>
+                        </div>
+                        <div
+                            className={styles.back}
+                            data-coords={alphanumericCoords}
+                        >
+                            <span
+                                className={`${styles.coords} d-none d-sm-block`}
+                            >
+                                {alphanumericCoords}
+                            </span>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );

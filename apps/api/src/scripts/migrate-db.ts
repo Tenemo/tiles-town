@@ -1,4 +1,5 @@
 import { closeDatabase } from '../database';
+import { logger } from '../logging';
 import { migrateDatabase } from '../migrator';
 
 const main = async (): Promise<void> => {
@@ -7,7 +8,7 @@ const main = async (): Promise<void> => {
 };
 
 void main().catch(async (error: Error) => {
-    console.error(error.message);
+    logger.error(error.message);
     try {
         await closeDatabase();
     } catch {

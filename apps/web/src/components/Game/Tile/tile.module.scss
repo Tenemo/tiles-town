@@ -23,14 +23,24 @@
         display: flex;
         height: 100%;
         width: 100%;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        font: inherit;
         align-items: center;
         justify-content: center;
         position: absolute;
         top: 0;
         left: 0;
         backface-visibility: hidden;
+        appearance: none;
         > span {
             pointer-events: none;
+        }
+        &:focus-visible {
+            outline: 2px solid var(--secondary-light);
+            outline-offset: -2px;
         }
     }
     .front {

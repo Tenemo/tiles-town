@@ -1,9 +1,4 @@
-const fs = require('fs');
-
 const extensions = ['.js', '.ts'];
-const { baseUrl } = JSON.parse(
-    fs.readFileSync('./tsconfig.json', 'utf8'),
-).compilerOptions;
 
 module.exports = {
     presets: [
@@ -30,7 +25,7 @@ module.exports = {
             'module-resolver',
             {
                 extensions,
-                root: [baseUrl],
+                root: ['./src'],
             },
         ],
     ],

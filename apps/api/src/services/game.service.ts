@@ -11,6 +11,7 @@ import type {
 import db from 'database';
 import { GAME_CONFIG } from 'config';
 import { randBetween } from 'utils/helpers';
+import { logger } from '../logging';
 
 import { generateBoard } from '../controllers/game/generateBoard';
 import { checkMoves } from '../controllers/game/checkMoves';
@@ -83,6 +84,7 @@ export const completeGame = async (
 
     if (!game) {
         return {
+            statusCode: 404,
             body: {
                 info: "Game doesn't exist",
             },
@@ -128,9 +130,9 @@ export const completeGame = async (
 
     const playerName = normalizePlayerName(input.playerName);
 
-    console.log('GAME WON');
-    console.log(`PLAYER: ${playerName}`);
-    console.log(`MOVE COUNT: ${input.moves.length}`);
+    logger.info('GAME WON');
+    logger.info(`PLAYER: ${playerName}`);
+    logger.info(`MOVE COUNT: ${input.moves.length}`);
 
     game.game_player_name = playerName;
     game.game_end_time = new Date();
@@ -207,7 +209,7 @@ export const updateScores = async (): Promise<string> => {
         game.game_score = newScore;
 
         await game.save();
-        console.log(
+        logger.info(
             `Updated ${element.game_id}'s score from ${
                 oldScore?.toString() ?? ''
             } to ${game.game_score?.toString() ?? ''}`,

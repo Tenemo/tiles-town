@@ -85,9 +85,7 @@ const flip = (tile: number): number => {
     if (tile === 0) {
         return 1;
     }
-    // eslint-disable-next-line no-console
-    console.error('uh oh');
-    return 999;
+    throw new Error(`Unsupported tile value: ${tile.toString()}`);
 };
 
 export const updateBoard = (game: GameState, move: string): GameState => {

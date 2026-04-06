@@ -12,22 +12,28 @@ import {
     compose,
     combineReducers,
     AnyAction,
+    Middleware,
 } from 'redux';
 import { createReduxHistoryContext } from 'redux-first-history';
 import { createLogger } from 'redux-logger';
-import thunk, { ThunkDispatch } from 'redux-thunk';
+import { thunk, ThunkDispatch, ThunkMiddleware } from 'redux-thunk';
 
 import { BUILD_TYPE } from 'constants/appConstants';
 import { appReducer, initialAppState } from 'store/app/appReducer';
 import { gameReducer, initialGameState } from 'store/game/gameReducer';
-import { RootState } from 'store/types';
-
-export const initialState = { app: initialAppState, game: initialGameState };
+import { AllActions, RootState } from 'store/types';
 
 const { createReduxHistory, routerMiddleware, routerReducer } =
     createReduxHistoryContext({
         history: createBrowserHistory(),
     });
+
+export const initialState: RootState = {
+    router: routerReducer(undefined, { type: '@@INIT' } as AnyAction),
+    app: initialAppState,
+    game: initialGameState,
+};
+
 const rootReducer = combineReducers({
     router: routerReducer,
     app: appReducer,
@@ -39,7 +45,11 @@ const logger = createLogger({
     collapsed: true,
 });
 const configureStoreDev = (): Store<RootState> => {
-    const middleware = [thunk, logger, routerMiddleware];
+    const middleware: Middleware[] = [
+        thunk as ThunkMiddleware<RootState, AllActions>,
+        logger,
+        routerMiddleware,
+    ];
     return legacy_createStore(
         rootReducer,
         initialState,
@@ -47,7 +57,10 @@ const configureStoreDev = (): Store<RootState> => {
     );
 };
 const configureStoreProd = (): Store<RootState> => {
-    const middleware = [thunk, routerMiddleware];
+    const middleware: Middleware[] = [
+        thunk as ThunkMiddleware<RootState, AllActions>,
+        routerMiddleware,
+    ];
     return legacy_createStore(
         rootReducer,
         initialState,

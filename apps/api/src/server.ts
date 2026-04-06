@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { router } from 'routes/router';
 import { config } from './config';
-import { setupLogging } from './logging';
+import { logger, setupLogging } from './logging';
 
 const allowlistedOrigins = new Set([
     ...config.corsAllowedOrigins,
@@ -39,7 +39,7 @@ app.use(
 );
 app.use(cookieParser());
 
-const { errorLogger, logger, sentryErrorHandler } = setupLogging(app);
+const { errorLogger, sentryErrorHandler } = setupLogging(app);
 
 app.use('/api', router);
 app.use(sentryErrorHandler);
@@ -62,28 +62,9 @@ const onError: ErrorRequestHandler = (err, _req, res, _next) => {
 app.use(onError);
 app.use(errorLogger);
 
-const writeLog =
-    (level: 'info' | 'warn' | 'error') =>
-    (...messages: unknown[]): void => {
-        logger.log({
-            level,
-            message: messages
-                .map((message) =>
-                    typeof message === 'string'
-                        ? message
-                        : JSON.stringify(message),
-                )
-                .join(' '),
-        });
-    };
-
-console.log = writeLog('info');
-console.warn = writeLog('warn');
-console.error = writeLog('error');
-
 export const startServer = (): Server =>
     app.listen(config.port, () => {
-        console.log(
+        logger.info(
             `Server running on port ${config.port} in ${config.env} environment`,
         );
     });

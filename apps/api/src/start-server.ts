@@ -1,4 +1,5 @@
 import { connectDatabase } from './database';
+import { logger } from './logging';
 import { startServer } from './server';
 
 const main = async (): Promise<void> => {
@@ -7,6 +8,6 @@ const main = async (): Promise<void> => {
 };
 
 void main().catch((error: Error) => {
-    console.error(error.message);
+    logger.error(error.message);
     process.exit(1);
 });

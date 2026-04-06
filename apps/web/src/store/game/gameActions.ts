@@ -159,12 +159,12 @@ export const winGame =
                     timeout: 20000,
                 },
             );
-            let scoreMsg = '';
             const receivedGame = response.data;
-            if (receivedGame.score) {
-                scoreMsg = `Total score: ${receivedGame.score}</br>`;
-            }
-            toast.success(`${scoreMsg} Great job!`, {
+            const successMessage =
+                typeof receivedGame.score === 'number'
+                    ? `Total score: ${receivedGame.score}. Great job!`
+                    : 'Great job!';
+            toast.success(successMessage, {
                 autoClose: 2000,
             });
             dispatch(lockBoard());

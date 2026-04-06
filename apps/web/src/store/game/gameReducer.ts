@@ -1,4 +1,6 @@
 /* eslint-disable no-plusplus */
+import { UnknownAction } from 'redux';
+
 import {
     GameState,
     GameActionTypes,
@@ -15,6 +17,24 @@ import {
     UNLOCK_BOARD,
 } from 'store/game/gameTypes';
 import { updateBoard } from 'utils/helpers';
+
+type NewGameSuccessAction = Extract<
+    GameActionTypes,
+    { type: typeof NEW_GAME_SUCCESS }
+>;
+type MakeMoveAction = Extract<GameActionTypes, { type: typeof MAKE_MOVE }>;
+type WinGameSuccessAction = Extract<
+    GameActionTypes,
+    { type: typeof WIN_GAME_SUCCESS }
+>;
+type UpdateOnChangeAction = Extract<
+    GameActionTypes,
+    { type: typeof UPDATE_ON_CHANGE }
+>;
+type GetHighScoresSuccessAction = Extract<
+    GameActionTypes,
+    { type: typeof GET_HIGH_SCORES_SUCCESS }
+>;
 
 const defaultSize = 6;
 const defaultBoard: number[][] = [];
@@ -57,7 +77,7 @@ export const initialGameState: GameState = {
 
 export const gameReducer = (
     state = initialGameState,
-    action: GameActionTypes,
+    action: GameActionTypes | UnknownAction,
 ): GameState => {
     let newState: GameState;
     switch (action.type) {
@@ -76,14 +96,15 @@ export const gameReducer = (
                 ...state,
                 requestsCount: state.requestsCount - 1,
             };
-        case NEW_GAME_SUCCESS:
+        case NEW_GAME_SUCCESS: {
+            const newGameAction = action as NewGameSuccessAction;
             newState = { ...state };
-            newState.board = action.newGame.board;
+            newState.board = newGameAction.newGame.board;
             newState.receivedBoard = JSON.parse(
                 JSON.stringify(newState.board),
             ) as number[][];
-            newState.gameId = action.newGame.gameId;
-            newState.size = action.newGame.size;
+            newState.gameId = newGameAction.newGame.gameId;
+            newState.size = newGameAction.newGame.size;
             newState.leftCount = 0;
             newState.moves = [];
             newState.moveCount = 0;
@@ -94,26 +115,30 @@ export const gameReducer = (
             }
             newState.firstTime = false;
             return newState;
-        case MAKE_MOVE:
+        }
+        case MAKE_MOVE: {
+            const makeMoveAction = action as MakeMoveAction;
             newState = { ...state };
-            newState.moves = newState.moves.concat(action.move);
+            newState.moves = newState.moves.concat(makeMoveAction.move);
             newState.moveCount += 1;
             newState = updateBoard(
                 JSON.parse(JSON.stringify(newState)) as GameState,
-                action.move,
+                makeMoveAction.move,
             );
             return newState;
-        case WIN_GAME_SUCCESS:
+        }
+        case WIN_GAME_SUCCESS: {
+            const winGameAction = action as WinGameSuccessAction;
             newState = { ...state };
             newState.previous = {
                 size: newState.size,
-                seed: action.game.seed ?? '',
-                moveCount: action.game.moveCount ?? null,
-                time: action.game.time ?? null,
-                score: action.game.score ?? null,
+                seed: winGameAction.game.seed ?? '',
+                moveCount: winGameAction.game.moveCount ?? null,
+                time: winGameAction.game.time ?? null,
+                score: winGameAction.game.score ?? null,
                 gameId: newState.gameId,
                 easyMode: newState.easyMode,
-                isSeedCustom: action.game.isSeedCustom ?? null,
+                isSeedCustom: winGameAction.game.isSeedCustom ?? null,
                 playerName: newState.playerName,
                 moves: [],
             };
@@ -124,16 +149,22 @@ export const gameReducer = (
             newState.moveCount = 0;
             newState.gameId = '';
             return newState;
-        case UPDATE_ON_CHANGE:
-            newState = { ...state };
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            newState[action.name as keyof GameState] = action.value;
+        }
+        case UPDATE_ON_CHANGE: {
+            const updateOnChangeAction = action as UpdateOnChangeAction;
+            newState = {
+                ...state,
+                [updateOnChangeAction.name]: updateOnChangeAction.value,
+            } as GameState;
             return newState;
-        case GET_HIGH_SCORES_SUCCESS:
+        }
+        case GET_HIGH_SCORES_SUCCESS: {
+            const getHighScoresSuccessAction =
+                action as GetHighScoresSuccessAction;
             newState = { ...state };
-            newState.highScores = action.highScores;
+            newState.highScores = getHighScoresSuccessAction.highScores;
             return newState;
+        }
         case RESTART_BOARD:
             newState = { ...state };
             newState.board = JSON.parse(

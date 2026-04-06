@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize';
 import _ from 'lodash';
 import { initGame } from 'models/game.model';
 import { config } from './config';
+import { logger } from './logging';
 
 export const sequelize = new Sequelize(
     config.postgres.database,
@@ -10,7 +11,7 @@ export const sequelize = new Sequelize(
     {
         logging:
             config.env === 'development'
-                ? (message: string) => console.log(message)
+                ? (message: string) => logger.info(message)
                 : false,
         dialect: 'postgres',
         dialectOptions: config.postgres.ssl

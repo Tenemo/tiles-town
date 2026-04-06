@@ -101,7 +101,7 @@ describe('game routes', () => {
         expect(secondGame.gameId).not.toBe(firstGame.gameId);
     });
 
-    it('returns a friendly response when a game does not exist', async () => {
+    it('returns a 404 response when a game does not exist', async () => {
         const response = await winGame(
             app,
             '1234567890abcdef1234567890abcdef',
@@ -111,7 +111,7 @@ describe('game routes', () => {
             },
         );
 
-        expect(response.status).toBe(200);
+        expect(response.status).toBe(404);
         expect(parseBody<WinGameResponse>(response)).toMatchObject({
             info: "Game doesn't exist",
         });

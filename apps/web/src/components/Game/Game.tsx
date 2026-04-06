@@ -43,10 +43,9 @@ export const Game = (): ReactElement => {
     ): void => {
         const { name } = event.currentTarget;
         let value: string | boolean | number =
+            event.currentTarget instanceof HTMLInputElement &&
             event.currentTarget.type === 'checkbox'
-                ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  event.currentTarget?.checked
+                ? event.currentTarget.checked
                 : event.currentTarget?.value;
 
         if (name === 'newSize') {

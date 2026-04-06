@@ -1,7 +1,6 @@
 {
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
-        "baseUrl": "./src/",
         "jsx": "react-jsx",
         "module": "ESNext",
         "moduleResolution": "bundler",
@@ -12,7 +11,15 @@
         "allowJs": true,
         "noEmit": true,
         "paths": {
-            "@tiles-town/contracts": ["../../packages/contracts/src/index.ts"]
+            "@tiles-town/contracts": ["../../packages/contracts/src/index.ts"],
+            "components/*": ["./src/components/*"],
+            "constants/*": ["./src/constants/*"],
+            "fonts/*": ["./src/fonts/*"],
+            "store": ["./src/store/index.ts"],
+            "store/*": ["./src/store/*"],
+            "styles/*": ["./src/styles/*"],
+            "typings/*": ["./src/typings/*"],
+            "utils/*": ["./src/utils/*"]
         }
     },
     "include": [

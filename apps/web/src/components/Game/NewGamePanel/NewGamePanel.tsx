@@ -1,6 +1,3 @@
-// TODO: Rewrite the inputs to be inside labels
-/* eslint-disable jsx-a11y/label-has-associated-control */
-
 import { ReactElement, MouseEvent, ChangeEvent } from 'react';
 
 import styles from './newGamePanel.module.scss';
@@ -34,9 +31,7 @@ const NewGamePanel = ({
         selectOptions.push(
             <option key={i} value={i}>
                 {i}
-                {/* // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                @ts-ignore */}
-                {i === 6 && ' - suggested'}
+                {Number(i) === 6 && ' - suggested'}
             </option>,
         );
     }
@@ -62,41 +57,43 @@ const NewGamePanel = ({
                 <div className="form-group">
                     <label htmlFor="playerName">
                         Player name to show on the scoreboard:
+                        <input
+                            className="form-control"
+                            id="playerName"
+                            maxLength={32}
+                            name="playerName"
+                            onChange={updateGameState}
+                            placeholder="anonymous"
+                            type="text"
+                            value={game.playerName}
+                        />
                     </label>
-                    <input
-                        className="form-control"
-                        id="playerName"
-                        maxLength={32}
-                        name="playerName"
-                        onChange={updateGameState}
-                        placeholder="anonymous"
-                        type="text"
-                        value={game.playerName}
-                    />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="newSize">Board size: </label>
-                    <select
-                        className="form-control"
-                        id="newSize"
-                        name="newSize"
-                        onChange={updateGameState}
-                        value={game.newSize}
-                    >
-                        {selectOptions}
-                    </select>
+                    <label htmlFor="newSize">
+                        Board size:
+                        <select
+                            className="form-control"
+                            id="newSize"
+                            name="newSize"
+                            onChange={updateGameState}
+                            value={game.newSize}
+                        >
+                            {selectOptions}
+                        </select>
+                    </label>
                 </div>
                 <div className="form-group">
                     <div className="form-check">
-                        <input
-                            checked={game.easyMode}
-                            className="form-check-input"
-                            id="easyMode"
-                            name="easyMode"
-                            onChange={updateGameState}
-                            type="checkbox"
-                        />
                         <label className="form-check-label" htmlFor="easyMode">
+                            <input
+                                checked={game.easyMode}
+                                className="form-check-input"
+                                id="easyMode"
+                                name="easyMode"
+                                onChange={updateGameState}
+                                type="checkbox"
+                            />
                             Easy Mode - disables score
                         </label>
                     </div>
@@ -104,16 +101,17 @@ const NewGamePanel = ({
                 <div className="form-group">
                     <label htmlFor="seed">
                         Optional seed for board generation, disables score:
+                        <input
+                            className="form-control"
+                            id="seed"
+                            maxLength={256}
+                            name="seed"
+                            onChange={updateGameState}
+                            placeholder="myBoardToShareWithFriends"
+                            type="text"
+                            value={game.seed}
+                        />
                     </label>
-                    <input
-                        className="form-control"
-                        maxLength={256}
-                        name="seed"
-                        onChange={updateGameState}
-                        placeholder="myBoardToShareWithFriends"
-                        type="text"
-                        value={game.seed}
-                    />
                 </div>
             </form>
         </div>
