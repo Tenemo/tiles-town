@@ -15,12 +15,24 @@ rewritten to TypeScript and now maintained as a pnpm + Turbo monorepo.
 
 - `apps/web` contains the React frontend.
 - `apps/api` contains the Express API.
-- `packages/contracts` contains shared request and response contracts.
+- `packages/contracts` contains shared runtime schemas, route constants, and
+  TypeScript types.
 - `tests/e2e` contains Playwright end-to-end coverage.
+
+## Repository docs
+
+- [apps/api/README.md](./apps/api/README.md) for API workspace usage and runtime
+  configuration
+- [apps/web/README.md](./apps/web/README.md) for frontend workspace usage and
+  deployment notes
+- [docs/endpoints.md](./docs/endpoints.md) for route behavior and payload
+  expectations
+- [docs/operations.md](./docs/operations.md) for local reset, verification,
+  CI, and deployment workflows
 
 ## Development
 
-Use Node `20.19.0` and `pnpm@10.7.0`.
+Use Node `24.14.1` and `pnpm@10.7.0`.
 
 ```bash
 pnpm install
@@ -68,6 +80,8 @@ pnpm run e2e
 
 The API integration tests expect Postgres to be available on `127.0.0.1:5434`.
 The default `pnpm run dev` and `pnpm run docker:up` flows already provide that.
+The browser tests also fail on unexpected console errors, page errors, and
+failing `/api` responses.
 
 ## Deployment
 
@@ -79,3 +93,6 @@ The default `pnpm run dev` and `pnpm run docker:up` flows already provide that.
   root, runs the built API migration script before start, and serves the API
   health check from `/api/health-check`.
 - Only set `SENTRY_ENABLED=true` on preview and production deploys.
+- GitHub Actions runs the full verification surface from
+  `.github/workflows/ci.yml`, including a smoke check against the built API
+  container.

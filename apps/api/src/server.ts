@@ -2,7 +2,6 @@ import { Server } from 'http';
 import express, { ErrorRequestHandler, json, urlencoded } from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { ValidationError } from 'express-validation';
 import { router } from 'routes/router';
 import { config } from './config';
 import { setupLogging } from './logging';
@@ -46,11 +45,6 @@ app.use('/api', router);
 app.use(sentryErrorHandler);
 
 const onError: ErrorRequestHandler = (err, _req, res, _next) => {
-    if (err instanceof ValidationError) {
-        res.status(err.statusCode).json(err);
-        return;
-    }
-
     const statusCode =
         typeof (err as { statusCode?: number }).statusCode === 'number'
             ? (err as { statusCode: number }).statusCode

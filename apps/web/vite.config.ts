@@ -4,6 +4,10 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
 const srcRoot = path.resolve(__dirname, './src');
+const webHost = process.env.WEB_HOST ?? '127.0.0.1';
+const webPort = Number(process.env.WEB_PORT ?? '3200');
+const apiProxyTarget =
+    process.env.VITE_PROXY_API_TARGET ?? 'http://127.0.0.1:4200';
 
 export default defineConfig({
     plugins: [react()],
@@ -38,10 +42,10 @@ export default defineConfig({
         },
     },
     server: {
-        host: '127.0.0.1',
-        port: 3200,
+        host: webHost,
+        port: webPort,
         proxy: {
-            '/api': 'http://127.0.0.1:4200',
+            '/api': apiProxyTarget,
         },
     },
     build: {

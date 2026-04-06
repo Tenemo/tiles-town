@@ -12,7 +12,7 @@ type Props = {
     type: number;
     coords: [number, number] | [number];
     size: number | string;
-    onMoveClick?: (event: MouseEvent<HTMLElement>) => void;
+    onMoveClick: (event: MouseEvent<HTMLElement>) => void;
     isDisabled: boolean;
 };
 
@@ -67,11 +67,6 @@ const Tile = ({
             </div>
         </div>
     );
-};
-
-Tile.defaultProps = {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    onMoveClick: () => {},
 };
 
 export default Tile;

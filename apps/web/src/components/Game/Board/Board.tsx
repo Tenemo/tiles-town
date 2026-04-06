@@ -12,6 +12,8 @@ type Props = {
     onMoveClick: (event: MouseEvent<HTMLElement>) => void;
 };
 
+const noop = (_event: MouseEvent<HTMLElement>): void => undefined;
+
 const Board = ({ game, onMoveClick }: Props): ReactElement => {
     return (
         <section>
@@ -22,6 +24,7 @@ const Board = ({ game, onMoveClick }: Props): ReactElement => {
                         key={`${i}_coord`}
                         coords={[i]}
                         isDisabled={false}
+                        onMoveClick={noop}
                         size={game.size}
                         type={3}
                     />
@@ -41,6 +44,7 @@ const Board = ({ game, onMoveClick }: Props): ReactElement => {
                 <Tile
                     coords={[-1, -1]}
                     isDisabled={false}
+                    onMoveClick={noop}
                     size={game.size}
                     type={4}
                 />
@@ -50,6 +54,7 @@ const Board = ({ game, onMoveClick }: Props): ReactElement => {
                         key={`${k}_coord`}
                         coords={[k]}
                         isDisabled={false}
+                        onMoveClick={noop}
                         size={game.size}
                         type={4}
                     />

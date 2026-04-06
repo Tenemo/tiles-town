@@ -1,7 +1,8 @@
-import type {
-    HighScore,
-    NewGameResponse,
-    WinGameResponse,
+import {
+    GAME_ROUTES,
+    type HighScore,
+    type NewGameResponse,
+    type WinGameResponse,
 } from '@tiles-town/contracts';
 import { toast } from 'react-toastify';
 
@@ -84,7 +85,9 @@ export const getHighScores =
     async (dispatch: CommonDispatch): Promise<void> => {
         dispatch(beginRequest());
         try {
-            const response = await request.get<HighScore[]>('/game/highScores');
+            const response = await request.get<HighScore[]>(
+                GAME_ROUTES.highScores,
+            );
             dispatch(getHighScoresSuccess(response.data));
             dispatch(requestSuccess());
         } catch (error) {
@@ -105,7 +108,7 @@ export const newGame =
         dispatch(beginRequest());
         try {
             const response = await request.post<NewGameResponse>(
-                '/game/new',
+                GAME_ROUTES.newGame,
                 JSON.stringify({
                     size: newSize,
                     easyMode,
@@ -141,7 +144,7 @@ export const winGame =
 
         try {
             const response = await request.put<WinGameResponse>(
-                `/game/${game.gameId}`,
+                GAME_ROUTES.winGame(game.gameId),
                 JSON.stringify({
                     moves: game.moves,
                     playerName: (() => {

@@ -23,6 +23,7 @@ export const Game = (): ReactElement => {
     const game = useSelector(getGame);
 
     const isLoading = game.requestsCount > 0;
+    const noop = (_event: MouseEvent<HTMLElement>): void => undefined;
 
     const onMoveClick = (event: MouseEvent<HTMLElement>): void => {
         const coords = event.currentTarget.getAttribute(
@@ -83,6 +84,7 @@ export const Game = (): ReactElement => {
                                     <Tile
                                         coords={[3, 0]}
                                         isDisabled
+                                        onMoveClick={noop}
                                         size={8}
                                         type={1}
                                     />
@@ -92,6 +94,7 @@ export const Game = (): ReactElement => {
                                     <Tile
                                         coords={[3, 0]}
                                         isDisabled
+                                        onMoveClick={noop}
                                         size={8}
                                         type={0}
                                     />

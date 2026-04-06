@@ -1,26 +1,40 @@
-/* TODO: remove */
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from 'express';
-import { validate } from 'express-validation';
-import paramValidation from 'constants/paramValidation';
+import {
+    NewGameRequestBodySchema,
+    WinGameParamsSchema,
+    WinGameRequestBodySchema,
+} from '@tiles-town/contracts';
 import gameController from 'controllers/game.controller';
+import { asyncHandler } from '../middleware/asyncHandler';
+import { validateRequest } from '../middleware/validateRequest';
 
 const router = Router();
 
 router
     .route('/new')
     /* POST /api/game/new - Initialize new game */
-    .post(validate(paramValidation.newGame), gameController.newGame);
+    .post(
+        validateRequest({
+            body: NewGameRequestBodySchema,
+        }),
+        asyncHandler(gameController.newGame),
+    );
 
 router
     .route('/:id')
     /* PUT /api/game/:id - Win given game */
-    .put(validate(paramValidation.winGame), gameController.winGame);
+    .put(
+        validateRequest({
+            body: WinGameRequestBodySchema,
+            params: WinGameParamsSchema,
+        }),
+        asyncHandler(gameController.winGame),
+    );
 
 router
     .route('/highScores')
     /* GET /api/game/highScores - Get highscores */
-    .get(gameController.highScores);
+    .get(asyncHandler(gameController.highScores));
 
 // router.route('/update')
 //     /* GET /api/game/highScores - Get highscores */

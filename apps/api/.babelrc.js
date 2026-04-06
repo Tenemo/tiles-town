@@ -10,15 +10,20 @@ module.exports = {
         [
             '@babel/preset-env',
             {
-                targets: "node 16.14",
+                targets: {
+                    node: '24.14',
+                },
                 useBuiltIns: 'usage',
                 corejs: 3,
                 modules: 'commonjs',
             },
         ],
-        ['@babel/preset-typescript',{
-            allowDeclareFields: true,
-        }]
+        [
+            '@babel/preset-typescript',
+            {
+                allowDeclareFields: true,
+            },
+        ],
     ],
     plugins: [
         [

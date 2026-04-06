@@ -10,6 +10,9 @@
         "lint": "tsc --project tsconfig.json --noEmit",
         "typecheck": "tsc --project tsconfig.json --noEmit"
     },
+    "dependencies": {
+        "@sinclair/typebox": "^0.34.49"
+    },
     "devDependencies": {
         "typescript": "^5.0.2"
     }
