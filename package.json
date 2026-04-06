@@ -1,0 +1,23 @@
+{
+  "name": "tiles-town",
+  "private": true,
+  "packageManager": "pnpm@10.7.0",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "tsc": "pnpm run typecheck",
+    "eslint": "pnpm run lint",
+    "stylelint": "pnpm --filter @tiles-town/web run stylelint",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.0.0",
+    "turbo": "^2.9.0"
+  }
+}
