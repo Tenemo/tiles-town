@@ -3,22 +3,24 @@ import _ from 'lodash';
 import { initGame } from 'models/game.model';
 import { config } from './config';
 
-const sequelize = new Sequelize(
+export const sequelize = new Sequelize(
     config.postgres.database,
     config.postgres.user,
     config.postgres.password,
     {
-        logging: () => {
-            if (config.env === 'development') return true;
-            else return false;
-        },
+        logging:
+            config.env === 'development'
+                ? (message: string) => console.log(message)
+                : false,
         dialect: 'postgres',
-        dialectOptions: {
-            ssl: {
-                require: true,
-                rejectUnauthorized: false,
-            },
-        },
+        dialectOptions: config.postgres.ssl
+            ? {
+                  ssl: {
+                      require: true,
+                      rejectUnauthorized: false,
+                  },
+              }
+            : undefined,
         port: config.postgres.port,
         host: config.postgres.host,
         pool: {
@@ -28,26 +30,16 @@ const sequelize = new Sequelize(
         },
     },
 );
-sequelize
-    .authenticate()
-    .then(() => {
-        console.log('Database connection has been established successfully.'); // eslint-disable-line no-console
-    })
-    .catch((err) => {
-        console.error('Unable to connect to the database:', err); // eslint-disable-line no-console
-    });
 
 const game = initGame(sequelize);
 
-sequelize
-    .sync()
-    .then(() => {
-        console.log('Database synchronized'); // eslint-disable-line no-console
-    })
-    .catch((err) => {
-        console.log('Rolled back, an error occurred:'); // eslint-disable-line no-console
-        console.log(err); // eslint-disable-line no-console
-    });
+export const connectDatabase = async (): Promise<void> => {
+    await sequelize.authenticate();
+};
+
+export const closeDatabase = async (): Promise<void> => {
+    await sequelize.close();
+};
 
 export default _.extend(
     {

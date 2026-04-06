@@ -41,14 +41,18 @@ export const Game = (): ReactElement => {
         event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>,
     ): void => {
         const { name } = event.currentTarget;
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const value =
+        let value: string | boolean | number =
             event.currentTarget.type === 'checkbox'
                 ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
                   event.currentTarget?.checked
                 : event.currentTarget?.value;
-        dispatch(updateOnChange(name, value as string));
+
+        if (name === 'newSize') {
+            value = Number(value);
+        }
+
+        dispatch(updateOnChange(name, value));
     };
 
     const onRestartClick = (event: MouseEvent<HTMLElement>): void => {

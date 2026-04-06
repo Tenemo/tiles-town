@@ -1,10 +1,26 @@
+import path from 'node:path';
+
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
+
+const srcRoot = path.resolve(__dirname, './src');
 
 export default defineConfig({
     plugins: [react()],
     resolve: {
-        tsconfigPaths: true,
+        alias: {
+            '@tiles-town/contracts': path.resolve(
+                __dirname,
+                '../../packages/contracts/src/index.ts',
+            ),
+            components: path.resolve(srcRoot, 'components'),
+            constants: path.resolve(srcRoot, 'constants'),
+            fonts: path.resolve(srcRoot, 'fonts'),
+            store: path.resolve(srcRoot, 'store'),
+            styles: path.resolve(srcRoot, 'styles'),
+            typings: path.resolve(srcRoot, 'typings'),
+            utils: path.resolve(srcRoot, 'utils'),
+        },
     },
     css: {
         modules: {
@@ -22,9 +38,10 @@ export default defineConfig({
         },
     },
     server: {
-        port: 3000,
+        host: '127.0.0.1',
+        port: 3200,
         proxy: {
-            '/api': 'http://localhost:8080',
+            '/api': 'http://127.0.0.1:4200',
         },
     },
     build: {

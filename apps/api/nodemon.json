@@ -2,6 +2,7 @@
     "watch": [
         ".babelrc.js",
         "src/**/*.*",
+        "test/**/*.*",
         "tsconfig.json",
         "package.json"
     ],

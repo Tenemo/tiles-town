@@ -1,11 +1,11 @@
 /* TODO: remove */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import express from 'express';
+import { Router } from 'express';
 import { validate } from 'express-validation';
 import paramValidation from 'constants/paramValidation';
 import gameController from 'controllers/game.controller';
 
-const router = express.Router();
+const router = Router();
 
 router
     .route('/new')

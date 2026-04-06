@@ -1,0 +1,59 @@
+name: E2E
+
+on:
+    push:
+        branches:
+            - master
+        paths:
+            - 'apps/api/**'
+            - 'apps/web/**'
+            - 'packages/contracts/**'
+            - 'tests/**'
+            - 'docker-compose.yml'
+            - 'package.json'
+            - 'playwright.config.ts'
+            - 'pnpm-lock.yaml'
+            - 'pnpm-workspace.yaml'
+            - 'tsconfig.base.json'
+            - 'tsconfig.json'
+            - 'turbo.json'
+            - 'README.md'
+    pull_request:
+        paths:
+            - 'apps/api/**'
+            - 'apps/web/**'
+            - 'packages/contracts/**'
+            - 'tests/**'
+            - 'docker-compose.yml'
+            - 'package.json'
+            - 'playwright.config.ts'
+            - 'pnpm-lock.yaml'
+            - 'pnpm-workspace.yaml'
+            - 'tsconfig.base.json'
+            - 'tsconfig.json'
+            - 'turbo.json'
+            - 'README.md'
+
+concurrency:
+    group: e2e-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    e2e:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: pnpm/action-setup@v4
+              with:
+                  version: 10.7.0
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: pnpm
+
+            - run: pnpm install --frozen-lockfile
+            - run: pnpm exec playwright install --with-deps chromium
+            - run: pnpm run e2e

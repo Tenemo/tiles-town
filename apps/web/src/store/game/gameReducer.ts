@@ -107,13 +107,13 @@ export const gameReducer = (
             newState = { ...state };
             newState.previous = {
                 size: newState.size,
-                seed: action.game.seed,
-                moveCount: action.game.moveCount,
-                time: action.game.time as number,
-                score: action.game.score as number,
+                seed: action.game.seed ?? '',
+                moveCount: action.game.moveCount ?? null,
+                time: action.game.time ?? null,
+                score: action.game.score ?? null,
                 gameId: newState.gameId,
                 easyMode: newState.easyMode,
-                isSeedCustom: action.game.isSeedCustom as boolean,
+                isSeedCustom: action.game.isSeedCustom ?? null,
                 playerName: newState.playerName,
                 moves: [],
             };

@@ -124,6 +124,7 @@ export const initGame = (sequelize: Sequelize): typeof Game => {
             sequelize,
             tableName: 'game',
             freezeTableName: true,
+            timestamps: false,
         },
     );
 

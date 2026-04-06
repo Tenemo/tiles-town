@@ -1,14 +1,14 @@
 import Joi from 'joi';
-import parseDbUrl from 'parse-database-url';
-import dotenv from 'dotenv';
+import { config as loadEnv } from 'dotenv';
+import { GAME_SIZE_LIMITS } from '@tiles-town/contracts';
 
-dotenv.config();
+loadEnv();
 
 export const GAME_CONFIG = {
-    minSize: 4,
-    maxSize: 16,
+    minSize: GAME_SIZE_LIMITS.min,
+    maxSize: GAME_SIZE_LIMITS.max,
     alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-};
+} as const;
 
 type DatabaseConfig = {
     database: string;
@@ -16,42 +16,69 @@ type DatabaseConfig = {
     host: string;
     user: string;
     password: string;
+    ssl: boolean;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-const databaseConfig: DatabaseConfig = parseDbUrl(
-    process.env.DATABASE_URL,
-) as DatabaseConfig;
+type EnvConfig = {
+    NODE_ENV: string;
+    PORT: number;
+    DATABASE_URL: string;
+    DATABASE_SSL: boolean;
+    CORS_ALLOWED_ORIGINS: string;
+    SENTRY_ENABLED: boolean;
+};
 
-const configSchema = Joi.object({
+const envSchema = Joi.object({
     NODE_ENV: Joi.string()
-        .allow('development', 'production')
+        .allow('development', 'production', 'test')
         .default('production'),
-    PORT: Joi.number().default(8080),
-    driver: Joi.string(),
-    database: Joi.string().required().description('Postgres database name'),
-    port: Joi.number().default(5432),
-    host: Joi.string().default('localhost'),
-    user: Joi.string().required().description('Postgres username'),
-    password: Joi.string().allow('').description('Postgres password'),
+    PORT: Joi.number().default(4200),
+    DATABASE_URL: Joi.string()
+        .uri({ scheme: ['postgres', 'postgresql'] })
+        .required(),
+    DATABASE_SSL: Joi.boolean().default(true),
+    CORS_ALLOWED_ORIGINS: Joi.string().allow('').default(''),
+    SENTRY_ENABLED: Joi.boolean().default(false),
 })
     .unknown()
     .required();
 
-Joi.assert(databaseConfig, configSchema);
+const validationResult = envSchema.validate(process.env, {
+    abortEarly: false,
+    convert: true,
+});
+
+if (validationResult.error) {
+    throw validationResult.error;
+}
+
+const env = validationResult.value as EnvConfig;
+
+const databaseUrl = new URL(env.DATABASE_URL);
+
+const parseOrigins = (value: string): string[] =>
+    value
+        .split(',')
+        .map((origin) => origin.trim())
+        .filter(Boolean);
 
 export const config: {
     env: string;
     port: number;
+    corsAllowedOrigins: string[];
+    sentryEnabled: boolean;
     postgres: DatabaseConfig;
 } = {
-    env: process.env.NODE_ENV as string, // Joi sets defaults
-    port: parseInt(process.env.PORT ?? '8080', 10),
+    env: env.NODE_ENV,
+    port: env.PORT,
+    corsAllowedOrigins: parseOrigins(env.CORS_ALLOWED_ORIGINS),
+    sentryEnabled: env.SENTRY_ENABLED,
     postgres: {
-        database: databaseConfig.database,
-        port: databaseConfig.port,
-        host: databaseConfig.host,
-        user: databaseConfig.user,
-        password: databaseConfig.password,
+        database: databaseUrl.pathname.replace(/^\//, ''),
+        port: databaseUrl.port ? parseInt(databaseUrl.port, 10) : 5432,
+        host: databaseUrl.hostname,
+        user: decodeURIComponent(databaseUrl.username),
+        password: decodeURIComponent(databaseUrl.password),
+        ssl: env.DATABASE_SSL,
     },
 };

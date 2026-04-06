@@ -1,4 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
+import type {
+    HighScore,
+    NewGameRequestBody,
+    NewGameResponse,
+    WinGameRequestBody,
+    WinGameResponse,
+} from '@tiles-town/contracts';
 import db from 'database';
 import md5 from 'md5';
 import { generateBoard } from './game/generateBoard';
@@ -10,105 +17,107 @@ import { Op } from 'sequelize';
 
 const Game = db.game;
 
-interface NewGameRequestBody {
-    size?: number;
-    seed?: string;
-    easyMode?: boolean;
-    previousId?: string;
-}
-
-interface WinGameRequestBody {
-    moves: string[];
-    playerName?: string;
-}
-
 const newGame = async (
     req: Request<unknown, unknown, NewGameRequestBody>,
-    res: Response,
+    res: Response<NewGameResponse>,
     next: NextFunction,
 ): Promise<void> => {
-    if (req.body.previousId !== null) {
-        await Game.destroy({
-            where: {
-                game_id: req.body.previousId,
-                game_isWon: false,
-            },
+    try {
+        if (req.body.previousId) {
+            await Game.destroy({
+                where: {
+                    game_id: req.body.previousId,
+                    game_isWon: false,
+                },
+            });
+        }
+        if (req.body.size === null || req.body.size === undefined) {
+            throw new Error('Size is required');
+        }
+
+        const board = generateBoard(
+            req.body.size,
+            req.body.seed || undefined,
+            req.body.easyMode,
+        );
+        const gameId = md5(`${Date.now()}${board.tiles.join()}`);
+        const game_isSeedCustom = !!req.body.seed;
+        const game = Game.build({
+            game_id: gameId,
+            game_size: board.size,
+            game_seed: board.seed,
+            game_isSeedCustom,
+            game_easyMode: req.body.easyMode || false,
+            game_isWon: false,
         });
+
+        await game.save();
+        res.json({ board: board.tiles, gameId, size: board.size });
+    } catch (err) {
+        next(err);
     }
-    if (req.body.size === null || req.body.size === undefined) {
-        throw new Error('Size is required');
-    }
-    const board = generateBoard(
-        req.body.size,
-        req.body.seed,
-        req.body.easyMode,
-    );
-    const gameId = md5(`${Date.now()}${board.tiles.join()}`);
-    const game_isSeedCustom = !!req.body.seed;
-    const game = Game.build({
-        game_id: gameId,
-        game_size: board.size,
-        game_seed: board.seed,
-        game_isSeedCustom,
-        game_easyMode: req.body.easyMode || false,
-        game_isWon: false,
-    });
-    game.save()
-        .then(() => res.json({ board: board.tiles, gameId, size: board.size }))
-        .catch((err) => next(err));
 };
 
 const winGame = async (
     req: Request<{ id: string }, unknown, WinGameRequestBody>,
-    res: Response,
+    res: Response<WinGameResponse>,
     next: NextFunction,
 ): Promise<void> => {
-    Game.findOne({ where: { game_id: req.params.id } })
-        .then((game) => {
-            if (!game) {
-                return res.json({ info: "Game doesn't exist" });
-            }
-            if (game.game_isWon) {
-                return res.json({
-                    isWon: game.game_isWon,
-                    score: game.game_score,
-                    info: "You've won already",
-                });
-            }
-            game.game_moves = req.body.moves.toString();
-            const isWon = checkMoves(game);
-            if (!isWon) {
-                return res.status(400).send(res);
-            }
-            console.log('GAME WON');
-            console.log(`PLAYER: ${req.body.playerName ?? ''}`);
-            console.log(`MOVE COUNT: ${req.body.moves.length ?? ''}`);
-            game.game_player_name = req.body.playerName ?? 'anonymous';
-            game.game_end_time = new Date();
-            game.game_time =
-                Number(game.game_end_time) - Number(game.game_start_time);
-            game.game_move_count = req.body.moves.length;
-            game.game_isWon = isWon;
-            const score = calculateScore(game);
-            if (score) {
-                game.game_score = score;
-            }
-            return game.save().then(() =>
-                res.json({
-                    score: game.game_score,
-                    time: game.game_time,
-                    moveCount: game.game_move_count,
-                    seed: game.game_seed,
-                    isSeedCustom: game.game_isSeedCustom,
-                }),
-            );
-        })
-        .catch((err) => next(err));
+    try {
+        const game = await Game.findOne({ where: { game_id: req.params.id } });
+
+        if (!game) {
+            res.json({ info: "Game doesn't exist" });
+            return;
+        }
+        if (game.game_isWon) {
+            res.json({
+                isWon: game.game_isWon,
+                score: game.game_score ?? undefined,
+                info: "You've won already",
+            });
+            return;
+        }
+
+        game.game_moves = req.body.moves.toString();
+        const isWon = checkMoves(game);
+        if (!isWon) {
+            res.status(400).json({
+                info: 'Illegal move sequence',
+            });
+            return;
+        }
+
+        console.log('GAME WON');
+        console.log(`PLAYER: ${req.body.playerName ?? ''}`);
+        console.log(`MOVE COUNT: ${req.body.moves.length ?? ''}`);
+        game.game_player_name = req.body.playerName ?? 'anonymous';
+        game.game_end_time = new Date();
+        game.game_time =
+            Number(game.game_end_time) - Number(game.game_start_time);
+        game.game_move_count = req.body.moves.length;
+        game.game_isWon = isWon;
+        const score = calculateScore(game);
+        if (score) {
+            game.game_score = score;
+        }
+
+        await game.save();
+        res.json({
+            score: game.game_score ?? undefined,
+            time: game.game_time,
+            moveCount: game.game_move_count,
+            seed: game.game_seed,
+            isSeedCustom: game.game_isSeedCustom,
+        });
+    } catch (err) {
+        next(err);
+    }
 };
 
 const highScores = async (
     _req: Request,
-    res: Response,
+    res: Response<HighScore[]>,
     next: NextFunction,
 ): Promise<void> => {
     try {

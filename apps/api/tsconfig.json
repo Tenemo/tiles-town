@@ -1,27 +1,29 @@
 {
+    "extends": "../../tsconfig.base.json",
     "compilerOptions": {
         "baseUrl": "./src/",
-        "target": "esnext",
         "module": "commonjs",
-        "esModuleInterop": true,
         "moduleResolution": "node",
         "removeComments": true,
         "declaration": false,
-        "allowSyntheticDefaultImports": true,
-        "forceConsistentCasingInFileNames": true,
-        "resolveJsonModule": true,
-        "strict": true,
         "sourceMap": true,
         "allowJs": true,
         "noEmit": true,
-        "isolatedModules": true,
-        "skipLibCheck": true,
-        "noUnusedParameters": true,
-        "noUnusedLocals": true,
-        "noErrorTruncation": true
+        "noErrorTruncation": true,
+        "types": ["node", "vitest/globals"],
+        "paths": {
+            "@tiles-town/contracts": ["../../packages/contracts/src/index.ts"]
+        }
     },
     "ts-node": {
         "require": ["tsconfig-paths/register"]
     },
-    "include": ["src/**/*", "config/**/*", ".eslintrc.js", "temp/**/*"]
+    "include": [
+        "src/**/*",
+        "test/**/*",
+        "config/**/*",
+        ".eslintrc.js",
+        "temp/**/*",
+        "vitest.config.ts"
+    ]
 }

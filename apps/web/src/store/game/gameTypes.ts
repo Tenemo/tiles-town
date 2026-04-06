@@ -1,3 +1,9 @@
+import type {
+    HighScore,
+    NewGameResponse,
+    WinGameResponse,
+} from '@tiles-town/contracts';
+
 export const NEW_GAME_SUCCESS = 'NEW_GAME_SUCCESS';
 export const MAKE_MOVE = 'MAKE_MOVE';
 export const WIN_GAME_SUCCESS = 'WIN_GAME_SUCCESS';
@@ -18,14 +24,6 @@ for (let i = 0; i < defaultSize; i += 1) {
         defaultBoard[i].push(0);
     }
 }
-
-export type HighScore = {
-    game_score: number;
-    game_player_name: string;
-    game_size: number;
-    game_move_count: number;
-    game_time: number;
-};
 
 // TODO: remove | nulls, add proper initial values
 export type GameState = {
@@ -72,7 +70,7 @@ type gameRequestSuccessAction = {
 };
 type newGameSuccessAction = {
     type: typeof NEW_GAME_SUCCESS;
-    newGame: GameState;
+    newGame: NewGameResponse;
 };
 type unlockBoardAction = {
     type: typeof UNLOCK_BOARD;
@@ -86,12 +84,12 @@ type makeMoveAction = {
 };
 type winGameSuccessAction = {
     type: typeof WIN_GAME_SUCCESS;
-    game: GameState;
+    game: WinGameResponse;
 };
 type updateOnChangeAction = {
     type: typeof UPDATE_ON_CHANGE;
     name: string;
-    value: string;
+    value: string | boolean | number;
 };
 type getHighScoresSuccessAction = {
     type: typeof GET_HIGH_SCORES_SUCCESS;

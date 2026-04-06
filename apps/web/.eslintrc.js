@@ -1,14 +1,16 @@
-const OFF = 0;
-const ERROR = 2;
+const {
+    OFF,
+    ERROR,
+    sharedExtends,
+    sharedPlugins,
+    sharedSettings,
+    sharedRules,
+    sharedOverrides,
+} = require('../../eslint.shared');
 
 module.exports = {
     extends: [
-        'eslint:recommended',
-        'plugin:@typescript-eslint/recommended',
-        'plugin:@typescript-eslint/recommended-requiring-type-checking',
-        'plugin:import/errors',
-        'plugin:import/warnings',
-        'plugin:import/typescript',
+        ...sharedExtends,
         'plugin:react/recommended',
         'plugin:jest/recommended',
         'plugin:jsx-a11y/strict',
@@ -17,15 +19,7 @@ module.exports = {
         'prettier',
         'plugin:prettier/recommended',
     ],
-    plugins: [
-        '@typescript-eslint',
-        'import',
-        'prettier',
-        'react',
-        'react-hooks',
-        'jest',
-        'jsx-a11y',
-    ],
+    plugins: [...sharedPlugins, 'react', 'react-hooks', 'jest', 'jsx-a11y'],
     parser: '@typescript-eslint/parser',
     parserOptions: {
         project: './tsconfig.json',
@@ -40,31 +34,14 @@ module.exports = {
         node: true,
     },
     settings: {
-        'import/resolver': {
-            typescript: {},
-        },
+        ...sharedSettings,
         react: {
             version: 'detect',
         },
     },
     rules: {
-        quotes: OFF,
-        'prettier/prettier': [
-            ERROR,
-            {
-                useTabs: false,
-                semi: true,
-                singleQuote: true,
-                jsxSingleQuote: false,
-                trailingComma: 'all',
-                arrowParens: 'always',
-            },
-        ],
+        ...sharedRules,
         'no-void': OFF,
-        'no-unused-vars': OFF, // @typescript-eslint/no-unused-vars replaces this rule
-        'arrow-parens': [ERROR, 'always', { requireForBlockBody: false }],
-        'no-use-before-define': OFF, // @typescript-eslint/no-use-before-define replaces this rule
-        'no-restricted-exports': OFF,
         'no-shadow': OFF, // https://github.com/typescript-eslint/tslint-to-eslint-config/issues/856
 
         'react/prop-types': OFF,
@@ -99,19 +76,6 @@ module.exports = {
 
         'react-hooks/rules-of-hooks': ERROR,
         'react-hooks/exhaustive-deps': ERROR,
-
-        'import/no-extraneous-dependencies': [ERROR, { devDependencies: true }],
-        'import/prefer-default-export': OFF,
-        'import/extensions': [
-            ERROR,
-            'ignorePackages',
-            {
-                js: 'never',
-                jsx: 'never',
-                ts: 'never',
-                tsx: 'never',
-            },
-        ],
         'import/order': [
             'error',
             {
@@ -122,29 +86,12 @@ module.exports = {
         ],
 
         'jsx-a11y/label-has-for': [ERROR, { required: { every: ['id'] } }],
-
-        '@typescript-eslint/explicit-function-return-type': [
-            ERROR,
-            {
-                allowExpressions: true,
-                allowTypedFunctionExpressions: true,
-            },
-        ],
-        '@typescript-eslint/explicit-module-boundary-types': ERROR,
-        '@typescript-eslint/no-unused-vars': OFF, // duplicate of ts(6133)
-        '@typescript-eslint/no-use-before-define': ERROR,
-        '@typescript-eslint/unbound-method': ERROR,
         '@typescript-eslint/no-shadow': [ERROR],
 
         'jest/no-commented-out-tests': ERROR,
     },
     overrides: [
-        {
-            files: ['*.js'],
-            rules: {
-                '@typescript-eslint/no-var-requires': OFF,
-            },
-        },
+        ...sharedOverrides,
         {
             files: '*Reducer.ts',
             rules: {

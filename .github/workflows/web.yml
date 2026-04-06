@@ -1,0 +1,56 @@
+name: Web
+
+on:
+    push:
+        branches:
+            - master
+        paths:
+            - 'apps/web/**'
+            - 'packages/contracts/**'
+            - 'package.json'
+            - 'pnpm-lock.yaml'
+            - 'pnpm-workspace.yaml'
+            - 'tsconfig.base.json'
+            - 'tsconfig.json'
+            - 'turbo.json'
+            - 'netlify.toml'
+            - 'README.md'
+    pull_request:
+        paths:
+            - 'apps/web/**'
+            - 'packages/contracts/**'
+            - 'package.json'
+            - 'pnpm-lock.yaml'
+            - 'pnpm-workspace.yaml'
+            - 'tsconfig.base.json'
+            - 'tsconfig.json'
+            - 'turbo.json'
+            - 'netlify.toml'
+            - 'README.md'
+
+concurrency:
+    group: web-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    web:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: pnpm/action-setup@v4
+              with:
+                  version: 10.7.0
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: pnpm
+
+            - run: pnpm install --frozen-lockfile
+            - run: pnpm --filter @tiles-town/contracts run build
+            - run: pnpm --filter @tiles-town/web run lint
+            - run: pnpm --filter @tiles-town/web run typecheck
+            - run: pnpm --filter @tiles-town/web run test
+            - run: pnpm --filter @tiles-town/web run build

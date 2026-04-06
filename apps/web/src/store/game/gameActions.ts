@@ -1,10 +1,14 @@
+import type {
+    HighScore,
+    NewGameResponse,
+    WinGameResponse,
+} from '@tiles-town/contracts';
 import { toast } from 'react-toastify';
 
 import { getGame } from 'store/game/gameSelectors';
 import {
     GameState,
     GameActionTypes,
-    HighScore,
     GAME_REQUEST_ERROR,
     GAME_REQUEST_BEGIN,
     GAME_REQUEST_SUCCESS,
@@ -19,9 +23,6 @@ import {
 } from 'store/game/gameTypes';
 import { CommonDispatch, RootState } from 'store/types';
 import request from 'utils/request';
-
-// Vite proxies /api to http://localhost:8080 in development.
-const apiUrl = '';
 
 export const requestSuccess = (): GameActionTypes => ({
     type: GAME_REQUEST_SUCCESS,
@@ -47,7 +48,7 @@ export const restartBoard = (): GameActionTypes => ({
     type: RESTART_BOARD,
 });
 
-export const newGameSuccess = (newGame: GameState): GameActionTypes => ({
+export const newGameSuccess = (newGame: NewGameResponse): GameActionTypes => ({
     type: NEW_GAME_SUCCESS,
     newGame,
 });
@@ -57,14 +58,14 @@ export const makeMove = (move: string): GameActionTypes => ({
     move,
 });
 
-export const winGameSuccess = (game: GameState): GameActionTypes => ({
+export const winGameSuccess = (game: WinGameResponse): GameActionTypes => ({
     type: WIN_GAME_SUCCESS,
     game,
 });
 
 export const updateOnChange = (
     name: string,
-    value: string,
+    value: string | boolean | number,
 ): GameActionTypes => ({
     type: UPDATE_ON_CHANGE,
     name,
@@ -83,9 +84,7 @@ export const getHighScores =
     async (dispatch: CommonDispatch): Promise<void> => {
         dispatch(beginRequest());
         try {
-            const response = await request.get<HighScore[]>(
-                `${apiUrl}/api/game/highScores`,
-            );
+            const response = await request.get<HighScore[]>('/game/highScores');
             dispatch(getHighScoresSuccess(response.data));
             dispatch(requestSuccess());
         } catch (error) {
@@ -105,8 +104,8 @@ export const newGame =
         dispatch(lockBoard());
         dispatch(beginRequest());
         try {
-            const response = await request.post<GameState>(
-                `${apiUrl}/api/game/new`,
+            const response = await request.post<NewGameResponse>(
+                '/game/new',
                 JSON.stringify({
                     size: newSize,
                     easyMode,
@@ -141,8 +140,8 @@ export const winGame =
         dispatch(beginRequest());
 
         try {
-            const response = await request.put<GameState & { score: number }>(
-                `${apiUrl}/api/game/${game.gameId}`,
+            const response = await request.put<WinGameResponse>(
+                `/game/${game.gameId}`,
                 JSON.stringify({
                     moves: game.moves,
                     playerName: (() => {

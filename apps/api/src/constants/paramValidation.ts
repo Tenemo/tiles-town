@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { GAME_CONFIG } from 'config';
+import { GAME_SIZE_LIMITS } from '@tiles-town/contracts';
 
 export default {
     // POST /api/game/new
@@ -7,8 +7,8 @@ export default {
         body: Joi.object({
             size: Joi.number()
                 .integer()
-                .min(GAME_CONFIG.minSize)
-                .max(GAME_CONFIG.maxSize)
+                .min(GAME_SIZE_LIMITS.min)
+                .max(GAME_SIZE_LIMITS.max)
                 .required(),
             seed: Joi.string().max(256).allow(null).allow('').trim(),
             previousId: Joi.string()

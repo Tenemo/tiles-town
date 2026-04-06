@@ -1,10 +1,12 @@
 import { Express, ErrorRequestHandler } from 'express';
-import winston, { Logger } from 'winston';
+import * as winston from 'winston';
+import { Logger } from 'winston';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
-import expressWinston from 'express-winston';
+import * as expressWinston from 'express-winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import morgan, { StreamOptions } from 'morgan';
+import { config } from './config';
 
 // TODO: don't disable this rule
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
@@ -27,33 +29,33 @@ export const setupLogging = (
     logger: Logger;
     sentryErrorHandler: ErrorRequestHandler;
 } => {
-    Sentry.init({
-        dsn: 'https://fe2d28a5bda54932b1914fdb2e81ab4c@o502294.ingest.sentry.io/4504889416089600',
-        integrations: [
-            // enable HTTP calls tracing
-            new Sentry.Integrations.Http({ tracing: true }),
-            // enable Express.js middleware tracing
-            new Tracing.Integrations.Express({ app }),
-        ],
+    if (config.sentryEnabled) {
+        Sentry.init({
+            dsn: 'https://fe2d28a5bda54932b1914fdb2e81ab4c@o502294.ingest.sentry.io/4504889416089600',
+            integrations: [
+                new Sentry.Integrations.Http({ tracing: true }),
+                new Tracing.Integrations.Express({ app }),
+            ],
+            tracesSampleRate: 1.0,
+        });
 
-        // Set tracesSampleRate to 1.0 to capture 100%
-        // of transactions for performance monitoring.
-        // We recommend adjusting this value in production
-        tracesSampleRate: 1.0,
-    });
+        app.use(Sentry.Handlers.requestHandler());
+        app.use(Sentry.Handlers.tracingHandler());
+    }
 
-    // RequestHandler creates a separate execution context using domains, so that every
-    // transaction/span/breadcrumb is attached to its own Hub instance
-    app.use(Sentry.Handlers.requestHandler());
-    // TracingHandler creates a trace for every incoming request
-    app.use(Sentry.Handlers.tracingHandler());
+    const transports: winston.transport[] = [
+        new winston.transports.Console({
+            level: 'http',
+        }),
+    ];
 
     const winstonConfig = {
         format: winstonFormat,
-        transports: [
-            new winston.transports.Console({
-                level: 'http',
-            }),
+        transports,
+    };
+
+    if (process.env.NODE_ENV !== 'test') {
+        transports.push(
             new DailyRotateFile({
                 filename: 'logs/combined-%DATE%.log',
                 datePattern: 'YYYY-MM-DD',
@@ -62,6 +64,8 @@ export const setupLogging = (
                 maxFiles: '14d',
                 level: 'http',
             }),
+        );
+        transports.push(
             new DailyRotateFile({
                 filename: 'logs/error-%DATE%.log',
                 datePattern: 'YYYY-MM-DD',
@@ -70,8 +74,8 @@ export const setupLogging = (
                 maxFiles: '30d',
                 level: 'error',
             }),
-        ],
-    };
+        );
+    }
 
     const logger = winston.createLogger(winstonConfig);
 
@@ -94,6 +98,8 @@ export const setupLogging = (
     return {
         errorLogger,
         logger,
-        sentryErrorHandler: Sentry.Handlers.errorHandler(),
+        sentryErrorHandler: !config.sentryEnabled
+            ? (((err, _req, _res, next) => next(err)) as ErrorRequestHandler)
+            : Sentry.Handlers.errorHandler(),
     };
 };
