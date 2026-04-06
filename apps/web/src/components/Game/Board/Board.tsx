@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import { ReactElement, MouseEvent } from 'react';
 
 import Tile from '../Tile';
@@ -18,21 +17,21 @@ const Board = ({ game, onMoveClick }: Props): ReactElement => {
     return (
         <section>
             {game.board.map((row, i) => (
-                <div key={i} className={styles.boardRow}>
+                <div className={styles.boardRow} key={i}>
                     {/* type 3 are left coord tiles */}
                     <Tile
-                        key={`${i}_coord`}
                         coords={[i]}
                         isDisabled={false}
+                        key={`${i}_coord`}
                         onMoveClick={noop}
                         size={game.size}
                         type={3}
                     />
                     {row.map((type, j) => (
                         <Tile
-                            key={`${i}_${j}`}
                             coords={[i, j]}
                             isDisabled={game.isDisabled}
+                            key={`${i}_${j}`}
                             onMoveClick={onMoveClick}
                             size={game.size}
                             type={type}
@@ -51,9 +50,9 @@ const Board = ({ game, onMoveClick }: Props): ReactElement => {
                 {game.board[0].map((_type, k) => (
                     // type 4 are bottom coord tiles
                     <Tile
-                        key={`${k}_coord`}
                         coords={[k]}
                         isDisabled={false}
+                        key={`${k}_coord`}
                         onMoveClick={noop}
                         size={game.size}
                         type={4}

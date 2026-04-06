@@ -32,7 +32,6 @@ const Panel = ({ game }: Props): ReactElement => {
                         <p className={styles.moves}>
                             Moves made:{' '}
                             {game.previous.moves.map((move, i) => (
-                                // eslint-disable-next-line react/no-array-index-key
                                 <Fragment key={`${i}_${move}`}>
                                     {!!i && ', '}
                                     {move}

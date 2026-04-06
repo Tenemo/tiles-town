@@ -30,7 +30,9 @@ test.describe('Tiles Town', () => {
 
         expect(body.size).toBe(4);
         expect(body.board).toHaveLength(4);
-        await expect(page.getByRole('button', { name: 'Restart' })).toBeEnabled();
+        await expect(
+            page.getByRole('button', { name: 'Restart' }),
+        ).toBeEnabled();
         errorTracker.assertClean();
     });
 
@@ -44,9 +46,9 @@ test.describe('Tiles Town', () => {
         const playerName = `E2E ${Date.now()}`;
 
         await page.goto('/');
-        await page.getByLabel('Player name to show on the scoreboard:').fill(
-            playerName,
-        );
+        await page
+            .getByLabel('Player name to show on the scoreboard:')
+            .fill(playerName);
         await page.getByLabel('Board size:').selectOption('4');
 
         const newGameResponsePromise = page.waitForResponse(
@@ -60,17 +62,22 @@ test.describe('Tiles Town', () => {
         const newGameResponse = await newGameResponsePromise;
         const body = (await newGameResponse.json()) as NewGameResponse;
         const winningMoves = solveBoard(body.board);
-        const winResponse = await request.put(GAME_ROUTES.winGame(body.gameId), {
-            data: {
-                moves: winningMoves,
-                playerName,
+        const winResponse = await request.put(
+            GAME_ROUTES.winGame(body.gameId),
+            {
+                data: {
+                    moves: winningMoves,
+                    playerName,
+                },
             },
-        });
+        );
 
         expect(winResponse.ok()).toBeTruthy();
 
         await page.reload();
-        await expect(page.getByRole('cell', { name: playerName })).toBeVisible();
+        await expect(
+            page.getByRole('cell', { name: playerName }),
+        ).toBeVisible();
         errorTracker.assertClean();
     });
 });

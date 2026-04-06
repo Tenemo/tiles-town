@@ -3,6 +3,7 @@
     "compilerOptions": {
         "module": "commonjs",
         "moduleResolution": "node",
+        "ignoreDeprecations": "6.0",
         "removeComments": true,
         "declaration": false,
         "sourceMap": true,
@@ -29,7 +30,6 @@
         "src/**/*",
         "test/**/*",
         "config/**/*",
-        ".eslintrc.js",
         "temp/**/*",
         "vitest.config.ts"
     ]

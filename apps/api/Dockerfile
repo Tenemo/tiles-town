@@ -3,7 +3,7 @@ FROM node:24.14.1-alpine
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
-RUN npm install -g pnpm@10.7.0
+RUN npm install -g pnpm@10.33.0
 
 WORKDIR /workspace
 

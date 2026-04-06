@@ -36,7 +36,8 @@ export default defineConfig({
             timeout: 120_000,
         },
         {
-            command: 'pnpm --filter @tiles-town/contracts run build && pnpm --filter @tiles-town/web run dev',
+            command:
+                'pnpm --filter @tiles-town/contracts run build && pnpm --filter @tiles-town/web run dev',
             env: {
                 ...process.env,
                 WEB_HOST: '127.0.0.1',

@@ -14,6 +14,5 @@ if (import.meta.env.PROD && import.meta.env.VITE_SENTRY_ENABLED === 'true') {
 
 const container = document.getElementById('root');
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(container!);
 root.render(<Root />);

@@ -1,6 +1,7 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, QueryInterface } from 'sequelize';
 import { MigrationFn } from 'umzug';
-import { MigrationContext } from '../migrator';
+
+type MigrationContext = QueryInterface;
 
 export const up: MigrationFn<MigrationContext> = async ({ context }) => {
     await context.createTable('game', {

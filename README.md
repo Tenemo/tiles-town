@@ -32,7 +32,7 @@ rewritten to TypeScript and now maintained as a pnpm + Turbo monorepo.
 
 ## Development
 
-Use Node `24.14.1` and `pnpm@10.7.0`.
+Use Node `24.14.1` and `pnpm@10.33.0`.
 
 ```bash
 pnpm install

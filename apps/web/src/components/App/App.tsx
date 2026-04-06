@@ -33,7 +33,6 @@ export class App extends Component<Props> {
         error: Error | null,
         errorInformation: { componentStack: string },
     ): void {
-        // eslint-disable-next-line no-console
         console.error(errorInformation.componentStack, error);
         this.setState({ error, errorInformation });
     }

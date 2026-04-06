@@ -37,7 +37,6 @@ const HighScores = (): ReactElement => {
                 <tbody>
                     {highScores.map((score, i) => {
                         return (
-                            // eslint-disable-next-line react/no-array-index-key
                             <tr key={`${JSON.stringify(score)}_${i}`}>
                                 <td>{i + 1}</td>
                                 <td>{score.game_score}</td>
