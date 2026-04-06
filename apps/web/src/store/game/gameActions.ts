@@ -20,9 +20,8 @@ import {
 import { CommonDispatch, RootState } from 'store/types';
 import request from 'utils/request';
 
-const apiUrl =
-    process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : '';
-// https://api.tiles.town
+// Vite proxies /api to http://localhost:8080 in development.
+const apiUrl = '';
 
 export const requestSuccess = (): GameActionTypes => ({
     type: GAME_REQUEST_SUCCESS,
@@ -91,7 +90,7 @@ export const getHighScores =
             dispatch(requestSuccess());
         } catch (error) {
             toast.error(
-                `Couldn't load high scores from the server 😥 \n Most likely Piotr turned off the server. \n${JSON.stringify(
+                `Couldn't load high scores from the server.\nMost likely Piotr turned off the server.\n${JSON.stringify(
                     error,
                 )}`,
             );
@@ -130,9 +129,7 @@ export const newGame =
             // wait for DOM a tiny bit to prevent flip animation, otherwise it bugs out
             setTimeout(() => dispatch(unlockBoard()), 20);
         } catch (error) {
-            toast.error(
-                `Couldn't load a new game 😥 \n${JSON.stringify(error)}`,
-            );
+            toast.error(`Couldn't load a new game.\n${JSON.stringify(error)}`);
             dispatch(requestError());
             throw error;
         }
@@ -165,7 +162,7 @@ export const winGame =
             if (receivedGame.score) {
                 scoreMsg = `Total score: ${receivedGame.score}</br>`;
             }
-            toast.success(`${scoreMsg} 😎 Great job!`, {
+            toast.success(`${scoreMsg} Great job!`, {
                 autoClose: 2000,
             });
             dispatch(lockBoard());
@@ -174,7 +171,7 @@ export const winGame =
             void dispatch(getHighScores());
         } catch (error) {
             toast.error(
-                `Request error, your game wasn't saved 😥 \n${JSON.stringify(
+                `Request error, your game wasn't saved.\n${JSON.stringify(
                     error,
                 )}`,
             );

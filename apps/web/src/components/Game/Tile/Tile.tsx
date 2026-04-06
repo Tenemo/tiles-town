@@ -2,9 +2,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-import React, { ReactElement, MouseEvent } from 'react';
+import { ReactElement, MouseEvent } from 'react';
 
-import styles from './tile.scss';
+import styles from './tile.module.scss';
 
 import { numToAlpha } from 'utils/helpers';
 

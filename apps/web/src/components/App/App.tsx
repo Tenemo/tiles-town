@@ -1,13 +1,10 @@
-import React, { Component, ReactElement } from 'react';
+import { Component, ReactElement } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { connect } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import 'normalize.css';
 
-import 'fonts/RobotoMono-Regular.woff2';
-import 'fonts/RobotoMono-Regular.woff';
-
-import styles from './app.scss';
+import styles from './app.module.scss';
 
 import Game from 'components/Game';
 import Header from 'components/Header';

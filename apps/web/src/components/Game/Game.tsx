@@ -1,9 +1,9 @@
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { ReactElement, MouseEvent, ChangeEvent } from 'react';
+import { ReactElement, MouseEvent, ChangeEvent } from 'react';
 
 import Board from './Board';
-import styles from './game.scss';
+import styles from './game.module.scss';
 import HighScores from './HighScores';
 import InfoPanels from './InfoPanels';
 import NewGamePanel from './NewGamePanel';

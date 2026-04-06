@@ -1,26 +1,28 @@
+@use "sass:color";
+
 :root {
     --light: #ffebcd;
     --dark: #1e1e1e;
 
     // Dark theme
-    --dark-primary: #{darken(rgb(246, 159, 29), 7%)};
-    --dark-primary-light: #{lighten(darken(rgb(246, 159, 29), 7%), 20%)};
+    --dark-primary: #{color.adjust(rgb(246, 159, 29), $lightness: -7%)};
+    --dark-primary-light: #{color.adjust(color.adjust(rgb(246, 159, 29), $lightness: -7%), $lightness: 20%)};
     --dark-primary-string: "rgb(246, 159, 29)"; //bootstrap4's hamburger
     --dark-secondary: rgb(70, 70, 70);
-    --dark-secondary-light: #{lighten(rgb(70, 70, 70), 20%)};
+    --dark-secondary-light: #{color.adjust(rgb(70, 70, 70), $lightness: 20%)};
     --dark-bg: var(--dark);
     --dark-links: var(--dark-primary-light);
-    --dark-active: #{darken(darken(rgb(246, 159, 29), 7%), 15%)};
+    --dark-active: #{color.adjust(color.adjust(rgb(246, 159, 29), $lightness: -7%), $lightness: -15%)};
 
     // Light theme
     --light-primary: rgb(56, 56, 56);
-    --light-primary-light: #{lighten(rgb(56, 56, 56), 20%)};
+    --light-primary-light: #{color.adjust(rgb(56, 56, 56), $lightness: 20%)};
     --light-primary-string: "rgb(56, 56, 56)"; //bootstrap4's hamburger
     --light-secondary: rgb(199, 199, 199);
-    --light-secondary-light: #{lighten(rgb(199, 199, 199), 20%)};
+    --light-secondary-light: #{color.adjust(rgb(199, 199, 199), $lightness: 20%)};
     --light-bg: var(--light);
-    --light-links: #{darken(rgb(246, 159, 29), 10%)};
-    --light-active: #{darken(rgb(246, 159, 29), 25%)};
+    --light-links: #{color.adjust(rgb(246, 159, 29), $lightness: -10%)};
+    --light-active: #{color.adjust(rgb(246, 159, 29), $lightness: -25%)};
 
     // Current, default to dark
     --primary: var(--dark-primary);

@@ -1,8 +1,8 @@
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { ReactElement, ChangeEvent } from 'react';
+import { ReactElement, ChangeEvent } from 'react';
 
-import styles from './header.scss';
+import styles from './header.module.scss';
 
 import { useSelector, useDispatch } from 'store';
 import { setTheme } from 'store/app/appActions';

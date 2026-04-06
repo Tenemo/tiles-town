@@ -21,7 +21,6 @@ module.exports = {
         '@typescript-eslint',
         'import',
         'prettier',
-        'html',
         'react',
         'react-hooks',
         'jest',
@@ -33,7 +32,6 @@ module.exports = {
         ecmaFeatures: {
             jsx: true,
         },
-        extraFileExtensions: ['.html', '.cjs'],
     },
     env: {
         browser: true,
@@ -43,7 +41,6 @@ module.exports = {
     },
     settings: {
         'import/resolver': {
-            'babel-module': {},
             typescript: {},
         },
         react: {
@@ -71,6 +68,8 @@ module.exports = {
         'no-shadow': OFF, // https://github.com/typescript-eslint/tslint-to-eslint-config/issues/856
 
         'react/prop-types': OFF,
+        'react/react-in-jsx-scope': OFF,
+        'react/jsx-uses-react': OFF,
         'react/prefer-stateless-function': OFF,
         'react/destructuring-assignment': [ERROR, 'always'],
         'react/jsx-filename-extension': [
@@ -150,12 +149,6 @@ module.exports = {
             files: '*Reducer.ts',
             rules: {
                 'default-param-last': OFF,
-            },
-        },
-        {
-            files: '*.scss.d.ts',
-            rules: {
-                'prettier/prettier': OFF,
             },
         },
         {

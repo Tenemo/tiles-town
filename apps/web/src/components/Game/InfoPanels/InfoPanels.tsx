@@ -1,6 +1,6 @@
-import React, { ReactElement, Fragment } from 'react';
+import { ReactElement, Fragment } from 'react';
 
-import styles from './infoPanels.scss';
+import styles from './infoPanels.module.scss';
 
 import { GameState } from 'store/game/gameTypes';
 

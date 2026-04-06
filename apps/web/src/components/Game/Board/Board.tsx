@@ -1,9 +1,9 @@
 /* eslint-disable react/no-array-index-key */
-import React, { ReactElement, MouseEvent } from 'react';
+import { ReactElement, MouseEvent } from 'react';
 
 import Tile from '../Tile';
 
-import styles from './board.scss';
+import styles from './board.module.scss';
 
 import { GameState } from 'store/game/gameTypes';
 

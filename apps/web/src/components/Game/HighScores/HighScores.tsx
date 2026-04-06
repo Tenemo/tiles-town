@@ -1,8 +1,8 @@
 import { faTrophy, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { ReactElement, useEffect } from 'react';
+import { ReactElement, useEffect } from 'react';
 
-import styles from './highScores.scss';
+import styles from './highScores.module.scss';
 
 import { useSelector, useDispatch } from 'store';
 import { getHighScores as fetchHighScores } from 'store/game/gameActions';

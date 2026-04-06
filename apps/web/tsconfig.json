@@ -1,10 +1,11 @@
 {
     "compilerOptions": {
         "baseUrl": "./src/",
-        "jsx": "react",
-        "target": "ES2017",
-        "module": "commonjs",
-        "moduleResolution": "node",
+        "jsx": "react-jsx",
+        "target": "ES2020",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "types": ["vite/client", "vitest/globals"],
         "removeComments": true,
         "declaration": false,
         "allowSyntheticDefaultImports": true,
@@ -20,6 +21,6 @@
         "noUnusedParameters": true,
         "noUnusedLocals": true
     },
-    "include": ["src/**/*", "config/**/*", ".eslintrc.js", "temp/**/*"],
+    "include": ["src/**/*", "config/**/*", ".eslintrc.js", "vite.config.ts"],
     "exclude": ["**/*.snap"]
 }

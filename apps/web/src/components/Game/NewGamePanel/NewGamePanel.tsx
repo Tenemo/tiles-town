@@ -1,9 +1,9 @@
 // TODO: Rewrite the inputs to be inside labels
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
-import React, { ReactElement, MouseEvent, ChangeEvent } from 'react';
+import { ReactElement, MouseEvent, ChangeEvent } from 'react';
 
-import styles from './newGamePanel.scss';
+import styles from './newGamePanel.module.scss';
 
 import { gameClientConfig } from 'constants/appConstants';
 import { GameState } from 'store/game/gameTypes';

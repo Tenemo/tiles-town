@@ -1,2 +1,1 @@
-declare module 'react-refresh';
-declare module 'react-refresh/babel';
+/// <reference types="vite/client" />
