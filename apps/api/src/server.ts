@@ -2,7 +2,7 @@ import { Server } from 'http';
 import express, { ErrorRequestHandler, json, urlencoded } from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { router } from 'routes/router';
+import { router } from './routes/router';
 import { config } from './config';
 import { logger, setupLogging } from './logging';
 

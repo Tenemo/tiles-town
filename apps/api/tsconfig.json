@@ -12,19 +12,8 @@
         "noErrorTruncation": true,
         "types": ["node", "vitest/globals"],
         "paths": {
-            "@tiles-town/contracts": ["../../packages/contracts/src/index.ts"],
-            "config": ["./src/config.ts"],
-            "controllers/*": ["./src/controllers/*"],
-            "database": ["./src/database.ts"],
-            "logging": ["./src/logging.ts"],
-            "models/*": ["./src/models/*"],
-            "routes/*": ["./src/routes/*"],
-            "services/*": ["./src/services/*"],
-            "utils/*": ["./src/utils/*"]
+            "@tiles-town/contracts": ["../../packages/contracts/src/index.ts"]
         }
-    },
-    "ts-node": {
-        "require": ["tsconfig-paths/register"]
     },
     "include": [
         "src/**/*",

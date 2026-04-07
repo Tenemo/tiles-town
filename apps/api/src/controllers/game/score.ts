@@ -1,5 +1,5 @@
-import { GAME_CONFIG } from 'config';
-import { GameAttributes } from 'models/game.model';
+import { GAME_CONFIG } from '../../config';
+import { GameAttributes } from '../../models/game.model';
 /**
  * Checks if moves are legal and end up in victory
  * @param {object} game

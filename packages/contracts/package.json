@@ -5,7 +5,8 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
-        "build": "tsc --project tsconfig.json",
+        "clean": "node -e \"const fs=require('fs'); const path=require('path'); fs.rmSync('dist',{recursive:true,force:true}); for (const entry of fs.readdirSync('src')) { if (/\\.(js|js\\.map|d\\.ts|d\\.ts\\.map)$/.test(entry)) { fs.rmSync(path.join('src', entry), { force: true }); } }\"",
+        "build": "pnpm run clean && tsc --project tsconfig.json",
         "dev": "tsc --project tsconfig.json --watch",
         "lint": "tsc --project tsconfig.json --noEmit",
         "typecheck": "tsc --project tsconfig.json --noEmit"

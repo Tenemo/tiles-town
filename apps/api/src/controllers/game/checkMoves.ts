@@ -1,7 +1,6 @@
 import { generateBoard } from './generateBoard';
-import { convertMoves } from 'utils/helpers';
-
-import { GameAttributes } from 'models/game.model';
+import { convertMoves } from '../../utils/helpers';
+import { GameAttributes } from '../../models/game.model';
 
 /**
  * Flips a single tile

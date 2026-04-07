@@ -8,9 +8,9 @@ import type {
     WinGameResponse,
 } from '@tiles-town/contracts';
 
-import db from 'database';
-import { GAME_CONFIG } from 'config';
-import { randBetween } from 'utils/helpers';
+import db from '../database';
+import { GAME_CONFIG } from '../config';
+import { randBetween } from '../utils/helpers';
 import { logger } from '../logging';
 
 import { generateBoard } from '../controllers/game/generateBoard';

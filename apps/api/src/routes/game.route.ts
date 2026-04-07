@@ -4,7 +4,7 @@ import {
     WinGameParamsSchema,
     WinGameRequestBodySchema,
 } from '@tiles-town/contracts';
-import gameController from 'controllers/game.controller';
+import gameController from '../controllers/game.controller';
 import { asyncHandler } from '../middleware/asyncHandler';
 import { validateRequest } from '../middleware/validateRequest';
 

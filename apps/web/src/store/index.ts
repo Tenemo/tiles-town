@@ -15,7 +15,6 @@ import {
     Middleware,
 } from 'redux';
 import { createReduxHistoryContext } from 'redux-first-history';
-import { createLogger } from 'redux-logger';
 import { thunk, ThunkDispatch, ThunkMiddleware } from 'redux-thunk';
 
 import { BUILD_TYPE } from 'constants/appConstants';
@@ -40,14 +39,9 @@ const rootReducer = combineReducers({
     game: gameReducer,
 });
 
-const logger = createLogger({
-    diff: true,
-    collapsed: true,
-});
 const configureStoreDev = (): Store<RootState> => {
     const middleware: Middleware[] = [
         thunk as ThunkMiddleware<RootState, AllActions>,
-        logger,
         routerMiddleware,
     ];
     return legacy_createStore(

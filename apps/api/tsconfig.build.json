@@ -1,0 +1,15 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "noEmit": false,
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "declaration": false,
+        "removeComments": false,
+        "paths": {
+            "@tiles-town/contracts": ["../../packages/contracts/dist/index.d.ts"]
+        }
+    },
+    "include": ["src/**/*"],
+    "exclude": ["test/**/*", "dist/**/*"]
+}

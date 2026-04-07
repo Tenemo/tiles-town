@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 import _ from 'lodash';
-import { initGame } from 'models/game.model';
+import { initGame } from './models/game.model';
 import { config } from './config';
 import { logger } from './logging';
 

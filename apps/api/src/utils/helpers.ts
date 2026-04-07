@@ -1,4 +1,4 @@
-import { GAME_CONFIG } from 'config';
+import { GAME_CONFIG } from '../config';
 
 /**
  * Converts numbers to corresponding alphabet letters, eg. 25 -> Z, 0 -> A
