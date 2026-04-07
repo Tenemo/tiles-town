@@ -135,6 +135,24 @@ describe('game routes', () => {
         expect(winGameResponse.info).toBe('Illegal move sequence');
     });
 
+    it('rejects malformed move coordinates before they reach game logic', async () => {
+        const newGameResponse = await createGame(app, {
+            size: 4,
+        });
+        const newGame = parseBody<NewGameResponse>(newGameResponse);
+
+        expect(newGameResponse.status).toBe(200);
+
+        const response = await winGame(app, newGame.gameId, {
+            moves: ['AAAA'],
+            playerName: 'bad-coordinates',
+        });
+        const body = parseBody<MessageResponse>(response);
+
+        expect(response.status).toBe(400);
+        expect(body.message).toContain('moves');
+    });
+
     it('stores a trimmed player name and reports repeat wins without mutating it', async () => {
         const newGameResponse = await createGame(app, {
             size: 4,

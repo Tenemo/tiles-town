@@ -4,6 +4,7 @@ import {
     type NewGameResponse,
     type WinGameResponse,
 } from '@tiles-town/contracts';
+import axios from 'axios';
 import { toast } from 'react-toastify';
 
 import { getGame } from 'store/game/gameSelectors';
@@ -24,6 +25,42 @@ import {
 } from 'store/game/gameTypes';
 import { CommonDispatch, RootState } from 'store/types';
 import request from 'utils/request';
+
+const hasMessage = (value: unknown): value is { message: string } =>
+    typeof value === 'object' &&
+    value !== null &&
+    'message' in value &&
+    typeof (value as { message?: unknown }).message === 'string';
+
+const getRequestErrorMessage = (error: unknown): string => {
+    if (axios.isAxiosError(error)) {
+        const statusPart =
+            typeof error.response?.status === 'number'
+                ? ` (HTTP ${error.response.status})`
+                : '';
+        const responseMessage = (() => {
+            const responseData: unknown = error.response?.data;
+
+            if (typeof responseData === 'string' && responseData.trim()) {
+                return `: ${responseData.trim()}`;
+            }
+
+            if (hasMessage(responseData) && responseData.message.trim()) {
+                return `: ${responseData.message.trim()}`;
+            }
+
+            return '';
+        })();
+
+        return `${error.message}${statusPart}${responseMessage}`;
+    }
+
+    if (error instanceof Error) {
+        return error.message;
+    }
+
+    return String(error);
+};
 
 export const requestSuccess = (): GameActionTypes => ({
     type: GAME_REQUEST_SUCCESS,
@@ -91,12 +128,12 @@ export const getHighScores =
             dispatch(getHighScoresSuccess(response.data));
             dispatch(requestSuccess());
         } catch (error) {
+            dispatch(requestError());
             toast.error(
-                `Couldn't load high scores from the server.\nMost likely Piotr turned off the server.\n${JSON.stringify(
+                `Couldn't load high scores from the server.\nMost likely Piotr turned off the server.\n${getRequestErrorMessage(
                     error,
                 )}`,
             );
-            dispatch(requestError());
             throw error;
         }
     };
@@ -131,8 +168,10 @@ export const newGame =
             // wait for DOM a tiny bit to prevent flip animation, otherwise it bugs out
             setTimeout(() => dispatch(unlockBoard()), 20);
         } catch (error) {
-            toast.error(`Couldn't load a new game.\n${JSON.stringify(error)}`);
             dispatch(requestError());
+            toast.error(
+                `Couldn't load a new game.\n${getRequestErrorMessage(error)}`,
+            );
             throw error;
         }
     };
@@ -172,12 +211,12 @@ export const winGame =
             dispatch(requestSuccess());
             void dispatch(getHighScores());
         } catch (error) {
+            dispatch(requestError());
             toast.error(
-                `Request error, your game wasn't saved.\n${JSON.stringify(
+                `Request error, your game wasn't saved.\n${getRequestErrorMessage(
                     error,
                 )}`,
             );
-            dispatch(requestError());
             throw error;
         }
     };

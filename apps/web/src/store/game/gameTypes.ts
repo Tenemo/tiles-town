@@ -16,15 +16,6 @@ export const GAME_REQUEST_ERROR = 'GAME_REQUEST_ERROR';
 export const GAME_REQUEST_BEGIN = 'GAME_REQUEST_BEGIN';
 export const GAME_REQUEST_SUCCESS = 'GAME_REQUEST_SUCCESS';
 
-const defaultSize = 6;
-const defaultBoard: number[][] = [];
-for (let i = 0; i < defaultSize; i += 1) {
-    defaultBoard.push([]);
-    for (let j = 0; j < defaultSize; j += 1) {
-        defaultBoard[i].push(0);
-    }
-}
-
 // TODO: remove | nulls, add proper initial values
 export type GameState = {
     requestsCount: number;

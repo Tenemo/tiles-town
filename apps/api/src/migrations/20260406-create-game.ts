@@ -1,5 +1,6 @@
-import { DataTypes, QueryInterface } from 'sequelize';
-import { MigrationFn } from 'umzug';
+import { DataTypes } from 'sequelize';
+import type { QueryInterface } from 'sequelize';
+import type { MigrationFn } from 'umzug';
 
 type MigrationContext = QueryInterface;
 

@@ -27,7 +27,13 @@ app.use(
                 return;
             }
 
-            callback(new Error(`Blocked by CORS: ${origin}`));
+            const corsError = new Error(
+                `Blocked by CORS: ${origin}`,
+            ) as Error & {
+                statusCode?: number;
+            };
+            corsError.statusCode = 403;
+            callback(corsError);
         },
     }),
 );
@@ -43,6 +49,7 @@ const { errorLogger, sentryErrorHandler } = setupLogging(app);
 
 app.use('/api', router);
 app.use(sentryErrorHandler);
+app.use(errorLogger);
 
 const onError: ErrorRequestHandler = (err, _req, res, _next) => {
     const statusCode =
@@ -60,7 +67,6 @@ const onError: ErrorRequestHandler = (err, _req, res, _next) => {
 };
 
 app.use(onError);
-app.use(errorLogger);
 
 export const startServer = (): Server =>
     app.listen(config.port, () => {

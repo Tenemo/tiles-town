@@ -1,9 +1,12 @@
 import { GAME_CONFIG } from '../../config';
 import { GameAttributes } from '../../models/game.model';
 /**
- * Checks if moves are legal and end up in victory
+ * Calculates the score for a completed game from board size, move count, and
+ * elapsed time.
+ * Returns `null` when the game is not eligible for scoring, including custom
+ * seed, easy mode, or boards smaller than the scoring minimum.
  * @param {object} game
- * @return {number}
+ * @return {number | null}
  */
 export const calculateScore = ({
     game_size,

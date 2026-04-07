@@ -5,6 +5,8 @@ export const GAME_SIZE_LIMITS = {
     max: 16,
 } as const;
 
+const MOVE_COORDINATE_PATTERN = '^[A-Pa-p](?:[1-9]|1[0-6])$';
+
 export const GameBoardSchema = Type.Array(Type.Array(Type.Integer()));
 export type GameBoard = Static<typeof GameBoardSchema>;
 
@@ -69,7 +71,7 @@ export type WinGameParams = Static<typeof WinGameParamsSchema>;
 export const WinGameRequestBodySchema = Type.Object({
     moves: Type.Array(
         Type.String({
-            pattern: '^[A-Za-z0-9]{1,4}$',
+            pattern: MOVE_COORDINATE_PATTERN,
         }),
         {
             maxItems: 10000,

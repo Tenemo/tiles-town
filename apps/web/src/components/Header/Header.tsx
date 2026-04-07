@@ -28,6 +28,9 @@ export const Header = (): ReactElement => {
                 />
                 <div className="form-switch form-check">
                     <input
+                        aria-label={`Switch to ${
+                            appTheme === 'dark' ? 'light' : 'dark'
+                        } theme`}
                         checked={appTheme === 'dark'}
                         className={`form-check-input ${styles.switchInput}`}
                         onChange={onToggleThemeClick}

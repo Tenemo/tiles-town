@@ -1,4 +1,4 @@
-import { ReactElement, MouseEvent, ChangeEvent } from 'react';
+import { ReactElement, MouseEvent, ChangeEvent, FormEvent } from 'react';
 
 import styles from './newGamePanel.module.scss';
 
@@ -22,6 +22,10 @@ const NewGamePanel = ({
     onRestartClick,
     loading,
 }: Props): ReactElement => {
+    const onSubmit = (event: FormEvent<HTMLFormElement>): void => {
+        event.preventDefault();
+    };
+
     const selectOptions = [];
     for (
         let i = gameClientConfig.minSize;
@@ -37,20 +41,20 @@ const NewGamePanel = ({
     }
     return (
         <div className={styles.newGamePanel}>
-            <form className="simpleBox">
+            <form className="simpleBox" onSubmit={onSubmit}>
                 <div className="form-group">
                     <input
                         className="btn btn-primary"
                         disabled={loading}
                         onClick={onNewGameClick}
-                        type="submit"
+                        type="button"
                         value={loading ? 'Loading...' : 'New Game'}
                     />
                     <input
                         className="btn btn-primary"
                         disabled={game.isDisabled}
                         onClick={onRestartClick}
-                        type="submit"
+                        type="button"
                         value="Restart"
                     />
                 </div>
