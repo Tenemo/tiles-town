@@ -39,7 +39,7 @@ describe('gameActions', () => {
         const dispatch = store.dispatch as AppDispatch;
 
         await expect(dispatch(getHighScores())).rejects.toThrow(
-            'Unexpected server response while loading high scores. Received HTML instead of JSON. Check VITE_API_BASE_URL or deployed /api routing.',
+            'Unexpected server response while loading high scores. Received HTML instead of JSON. Check the hardcoded API base URL or deployed /api routing.',
         );
 
         expect(store.getState().game.highScores).toEqual([]);

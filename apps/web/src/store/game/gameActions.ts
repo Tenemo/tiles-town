@@ -72,7 +72,7 @@ const describeUnexpectedResponse = (value: unknown): string => {
         typeof value === 'string' &&
         /<(?:!doctype|html|head|body)\b/i.test(value)
     ) {
-        return 'Received HTML instead of JSON. Check VITE_API_BASE_URL or deployed /api routing.';
+        return 'Received HTML instead of JSON. Check the hardcoded API base URL or deployed /api routing.';
     }
 
     if (Array.isArray(value)) {

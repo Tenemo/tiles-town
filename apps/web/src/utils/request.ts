@@ -3,11 +3,9 @@ import axios from 'axios';
 export const normalizeApiBaseUrl = (baseUrl: string): string =>
     baseUrl.replace(/\/+$/, '').replace(/\/api$/, '');
 
-const configuredApiBaseUrl = import.meta.env.VITE_API_BASE_URL as
-    | string
-    | undefined;
-const resolvedApiBaseUrl = configuredApiBaseUrl?.trim()
-    ? normalizeApiBaseUrl(configuredApiBaseUrl.trim()) || '/'
+const productionApiBaseUrl = 'https://api.tiles.town';
+const resolvedApiBaseUrl = import.meta.env.PROD
+    ? normalizeApiBaseUrl(productionApiBaseUrl)
     : '/';
 
 export default axios.create({

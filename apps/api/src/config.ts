@@ -24,7 +24,6 @@ type EnvConfig = {
     PORT: number;
     DATABASE_URL: string;
     DATABASE_SSL: boolean;
-    CORS_ALLOWED_ORIGINS: string;
     SENTRY_ENABLED: boolean;
 };
 
@@ -37,7 +36,6 @@ const envSchema = Joi.object({
         .uri({ scheme: ['postgres', 'postgresql'] })
         .required(),
     DATABASE_SSL: Joi.boolean().default(true),
-    CORS_ALLOWED_ORIGINS: Joi.string().allow('').default(''),
     SENTRY_ENABLED: Joi.boolean().default(false),
 })
     .unknown()
@@ -56,22 +54,14 @@ const env = validationResult.value as EnvConfig;
 
 const databaseUrl = new URL(env.DATABASE_URL);
 
-const parseOrigins = (value: string): string[] =>
-    value
-        .split(',')
-        .map((origin) => origin.trim())
-        .filter(Boolean);
-
 export const config: {
     env: string;
     port: number;
-    corsAllowedOrigins: string[];
     sentryEnabled: boolean;
     postgres: DatabaseConfig;
 } = {
     env: env.NODE_ENV,
     port: env.PORT,
-    corsAllowedOrigins: parseOrigins(env.CORS_ALLOWED_ORIGINS),
     sentryEnabled: env.SENTRY_ENABLED,
     postgres: {
         database: databaseUrl.pathname.replace(/^\//, ''),
