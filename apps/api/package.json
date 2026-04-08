@@ -1,0 +1,71 @@
+{
+    "name": "@tiles-town/api",
+    "version": "2.0.0",
+    "description": "Backend for tiles.town",
+    "author": "piotr@piech.dev",
+    "license": "UNLICENSED",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Tenemo/tiles-town.git"
+    },
+    "bugs": {
+        "url": "https://github.com/Tenemo/tiles-town/issues"
+    },
+    "homepage": "https://github.com/Tenemo/tiles-town#readme",
+    "engines": {
+        "node": ">=24.14.1 <25"
+    },
+    "scripts": {
+        "start": "node dist/start-server.js",
+        "build": "pnpm --filter @tiles-town/contracts run build && pnpm --filter @tiles-town/game-core run build && pnpm run clean && tsc --project tsconfig.build.json",
+        "clean": "pnpm exec rimraf dist",
+        "cleanDist": "pnpm run clean",
+        "db:migrate": "ts-node --transpile-only src/scripts/migrate-db.ts",
+        "db:migrate:dist": "node dist/scripts/migrate-db.js",
+        "dev": "pnpm run db:migrate && nodemon",
+        "nodemon": "nodemon",
+        "dev:ts": "ts-node --transpile-only src/start-server.ts",
+        "eslint": "pnpm --dir ../.. exec eslint apps/api/src apps/api/test apps/api/vitest.config.ts",
+        "eslint:fix": "pnpm --dir ../.. exec eslint apps/api/src apps/api/test apps/api/vitest.config.ts --fix",
+        "lint": "pnpm run eslint",
+        "tsc": "tsc",
+        "typecheck": "pnpm run tsc",
+        "test": "pnpm --filter @tiles-town/contracts run build && pnpm --filter @tiles-town/game-core run build && pnpm --filter @tiles-town/testkit run build && cross-env NODE_ENV=test vitest run --reporter verbose",
+        "test:coverage": "pnpm run test -- --coverage",
+        "test:watch": "cross-env NODE_ENV=test vitest"
+    },
+    "dependencies": {
+        "@sentry/node": "^10.47.0",
+        "@sinclair/typebox": "^0.34.49",
+        "@tiles-town/contracts": "workspace:*",
+        "@tiles-town/game-core": "workspace:*",
+        "cors": "^2.8.6",
+        "cross-env": "^10.1.0",
+        "dotenv": "^17.4.1",
+        "express": "^5.2.1",
+        "express-winston": "^4.2.0",
+        "joi": "^18.1.2",
+        "morgan": "^1.10.1",
+        "pg": "^8.20.0",
+        "seedrandom": "^3.0.5",
+        "sequelize": "^6.37.8",
+        "umzug": "^3.8.2",
+        "winston": "^3.19.0",
+        "winston-daily-rotate-file": "^5.0.0"
+    },
+    "devDependencies": {
+        "@tiles-town/testkit": "workspace:*",
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.6",
+        "@types/morgan": "^1.9.10",
+        "@types/node": "^25.5.2",
+        "@types/seedrandom": "^3.0.8",
+        "@types/supertest": "^7.2.0",
+        "nodemon": "^3.1.14",
+        "rimraf": "^6.1.3",
+        "supertest": "^7.2.2",
+        "ts-node": "^10.9.2",
+        "typescript": "^6.0.2",
+        "vitest": "^4.1.2"
+    }
+}

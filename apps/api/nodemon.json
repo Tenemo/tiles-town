@@ -1,0 +1,11 @@
+{
+    "watch": [
+        "src/**/*.*",
+        "test/**/*.*",
+        "tsconfig.json",
+        "tsconfig.build.json",
+        "package.json"
+    ],
+    "exec": "pnpm run dev:ts",
+    "ignore": ["dist/", "tmp/"]
+}
