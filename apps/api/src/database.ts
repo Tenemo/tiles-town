@@ -1,0 +1,48 @@
+import { Sequelize } from 'sequelize';
+import { initGame } from './models/game.model';
+import { config } from './config';
+import { logger } from './logging';
+
+export const sequelize = new Sequelize(
+    config.postgres.database,
+    config.postgres.user,
+    config.postgres.password,
+    {
+        logging:
+            config.env === 'development'
+                ? (message: string) => logger.info(message)
+                : false,
+        dialect: 'postgres',
+        dialectOptions: config.postgres.ssl
+            ? {
+                  ssl: {
+                      require: true,
+                      rejectUnauthorized: false,
+                  },
+              }
+            : undefined,
+        port: config.postgres.port,
+        host: config.postgres.host,
+        pool: {
+            max: 10,
+            idle: 30000,
+            acquire: 3600 * 1000 * 6,
+        },
+    },
+);
+
+const game = initGame(sequelize);
+
+export const connectDatabase = async (): Promise<void> => {
+    await sequelize.authenticate();
+};
+
+export const closeDatabase = async (): Promise<void> => {
+    await sequelize.close();
+};
+
+export default {
+    sequelize,
+    Sequelize,
+    game,
+};

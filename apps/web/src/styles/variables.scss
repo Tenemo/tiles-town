@@ -1,0 +1,26 @@
+@use "sass:color";
+
+:root {
+    --bs-btn-disabled-bg: var(--primary);
+    --bs-btn-bg: var(--primary);
+    --bs-btn-active-bg: var(--primary);
+    --bs-btn-active-border-color: var(--primary);
+    --bs-btn-active-color: var(--primary);
+}
+
+:root,
+:root[data-theme='dark'] {
+    --primary: #{color.adjust(rgb(246, 159, 29), $lightness: -7%)};
+    --primary-light: #{color.adjust(color.adjust(rgb(246, 159, 29), $lightness: -7%), $lightness: 20%)};
+    --secondary: rgb(70, 70, 70);
+    --secondary-light: #{color.adjust(rgb(70, 70, 70), $lightness: 20%)};
+    --bg: #1e1e1e;
+}
+
+:root[data-theme='light'] {
+    --primary: rgb(56, 56, 56);
+    --primary-light: #{color.adjust(rgb(56, 56, 56), $lightness: 20%)};
+    --secondary: rgb(199, 199, 199);
+    --secondary-light: #{color.adjust(rgb(199, 199, 199), $lightness: 20%)};
+    --bg: #ffebcd;
+}

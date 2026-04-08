@@ -1,0 +1,33 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "jsx": "react-jsx",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "ignoreDeprecations": "6.0",
+        "types": ["vite/client", "vitest/globals"],
+        "removeComments": true,
+        "declaration": false,
+        "sourceMap": true,
+        "allowJs": true,
+        "noEmit": true,
+        "paths": {
+            "@tiles-town/contracts": ["../../packages/contracts/src/index.ts"],
+            "@tiles-town/game-core": ["../../packages/game-core/src/index.ts"],
+            "components/*": ["./src/components/*"],
+            "constants/*": ["./src/constants/*"],
+            "fonts/*": ["./src/fonts/*"],
+            "store": ["./src/store/index.ts"],
+            "store/*": ["./src/store/*"],
+            "styles/*": ["./src/styles/*"],
+            "typings/*": ["./src/typings/*"],
+            "utils/*": ["./src/utils/*"]
+        }
+    },
+    "include": [
+        "src/**/*",
+        "config/**/*",
+        "vite.config.ts"
+    ],
+    "exclude": ["**/*.snap"]
+}

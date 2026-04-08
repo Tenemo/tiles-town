@@ -1,0 +1,56 @@
+@use "bootstrap/scss/bootstrap";
+@use "variables";
+
+html,
+body,
+#root {
+    height: 100%;
+    font-size: 16px;
+}
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+body.using-mouse {
+    :focus,
+    [class$="-is-focused"] {
+        outline: none;
+        box-shadow: initial;
+    }
+}
+body {
+    @font-face {
+        font-family: "Roboto Mono";
+        src: url("../fonts/RobotoMono-Regular.woff2") format("woff2"),
+            url("../fonts/RobotoMono-Regular.woff") format("woff");
+    }
+    font-family: "Roboto Mono", "Courier New", "Courier", monospace;
+    margin: 0px;
+    transition: background-color 500ms linear;
+    background-color: var(--bg);
+    color: var(--primary);
+    .btn-primary {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        &:hover,
+        &:disabled,
+        &.disabled,
+        &:focus {
+            background-color: var(--primary-light);
+            border-color: var(--primary-light);
+        }
+    }
+    .form-check-input:checked {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        &:hover,
+        &:disabled,
+        &.disabled,
+        &:focus {
+            background-color: var(--primary-light);
+            border-color: var(--primary-light);
+        }
+    }
+}

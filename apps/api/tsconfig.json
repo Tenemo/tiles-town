@@ -1,0 +1,27 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "ignoreDeprecations": "6.0",
+        "removeComments": true,
+        "declaration": false,
+        "sourceMap": true,
+        "allowJs": true,
+        "noEmit": true,
+        "noErrorTruncation": true,
+        "types": ["node", "vitest/globals"],
+        "paths": {
+            "@tiles-town/contracts": ["../../packages/contracts/src/index.ts"],
+            "@tiles-town/game-core": ["../../packages/game-core/src/index.ts"],
+            "@tiles-town/testkit": ["../../packages/testkit/src/index.ts"]
+        }
+    },
+    "include": [
+        "src/**/*",
+        "test/**/*",
+        "config/**/*",
+        "temp/**/*",
+        "vitest.config.ts"
+    ]
+}
