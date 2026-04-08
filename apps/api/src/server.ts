@@ -1,6 +1,5 @@
 import { Server } from 'http';
 import express, { ErrorRequestHandler, json, urlencoded } from 'express';
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { router } from './routes/router';
 import { config } from './config';
@@ -43,7 +42,6 @@ app.use(
         extended: true,
     }),
 );
-app.use(cookieParser());
 
 const { errorLogger, sentryErrorHandler } = setupLogging(app);
 

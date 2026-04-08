@@ -12,18 +12,20 @@ const Panel = ({ game }: Props): ReactElement => {
     return (
         <div className={styles.infoPanels}>
             <div className="simpleBox">
-                {game.moveCount != null && game.moveCount !== 0 && (
-                    <p>Move count: {game.moveCount}</p>
-                )}
+                {game.moveCount !== 0 && <p>Move count: {game.moveCount}</p>}
             </div>
             <div className="simpleBox">
-                {game.previous.gameId && <h5>Previous Won Game</h5>}
-                {game.previous.score && <div>Score: {game.previous.score}</div>}
-                {game.previous.size && <div>Size: {game.previous.size}</div>}
-                {game.previous.moveCount && (
+                {game.previous.gameId && <h5>Previous won game</h5>}
+                {game.previous.score != null && (
+                    <div>Score: {game.previous.score}</div>
+                )}
+                {game.previous.size != null && (
+                    <div>Size: {game.previous.size}</div>
+                )}
+                {game.previous.moveCount != null && (
                     <div>Move count: {game.previous.moveCount}</div>
                 )}
-                {game.previous.time && (
+                {game.previous.time != null && (
                     <div>Time: {Math.trunc(game.previous.time / 1000)} s</div>
                 )}
                 {game.previous.seed && <div>Seed: {game.previous.seed}</div>}

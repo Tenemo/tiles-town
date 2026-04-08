@@ -1,43 +1,26 @@
 @use "sass:color";
 
 :root {
-    --light: #ffebcd;
-    --dark: #1e1e1e;
-
-    // Dark theme
-    --dark-primary: #{color.adjust(rgb(246, 159, 29), $lightness: -7%)};
-    --dark-primary-light: #{color.adjust(color.adjust(rgb(246, 159, 29), $lightness: -7%), $lightness: 20%)};
-    --dark-primary-string: "rgb(246, 159, 29)"; //bootstrap4's hamburger
-    --dark-secondary: rgb(70, 70, 70);
-    --dark-secondary-light: #{color.adjust(rgb(70, 70, 70), $lightness: 20%)};
-    --dark-bg: var(--dark);
-    --dark-links: var(--dark-primary-light);
-    --dark-active: #{color.adjust(color.adjust(rgb(246, 159, 29), $lightness: -7%), $lightness: -15%)};
-
-    // Light theme
-    --light-primary: rgb(56, 56, 56);
-    --light-primary-light: #{color.adjust(rgb(56, 56, 56), $lightness: 20%)};
-    --light-primary-string: "rgb(56, 56, 56)"; //bootstrap4's hamburger
-    --light-secondary: rgb(199, 199, 199);
-    --light-secondary-light: #{color.adjust(rgb(199, 199, 199), $lightness: 20%)};
-    --light-bg: var(--light);
-    --light-links: #{color.adjust(rgb(246, 159, 29), $lightness: -10%)};
-    --light-active: #{color.adjust(rgb(246, 159, 29), $lightness: -25%)};
-
-    // Current, default to dark
-    --primary: var(--dark-primary);
-    --primary-light: var(--dark-primary-light);
-    --primary-string: var(--dark-primary-string);
-    --secondary: var(--dark-secondary);
-    --secondary-light: var(--dark-secondary-light);
-    --bg: var(--dark-bg);
-    --links: var(--dark-links);
-    --active: var(--dark-active);
-
-    // Bootstrap
     --bs-btn-disabled-bg: var(--primary);
     --bs-btn-bg: var(--primary);
     --bs-btn-active-bg: var(--primary);
     --bs-btn-active-border-color: var(--primary);
     --bs-btn-active-color: var(--primary);
+}
+
+:root,
+:root[data-theme='dark'] {
+    --primary: #{color.adjust(rgb(246, 159, 29), $lightness: -7%)};
+    --primary-light: #{color.adjust(color.adjust(rgb(246, 159, 29), $lightness: -7%), $lightness: 20%)};
+    --secondary: rgb(70, 70, 70);
+    --secondary-light: #{color.adjust(rgb(70, 70, 70), $lightness: 20%)};
+    --bg: #1e1e1e;
+}
+
+:root[data-theme='light'] {
+    --primary: rgb(56, 56, 56);
+    --primary-light: #{color.adjust(rgb(56, 56, 56), $lightness: 20%)};
+    --secondary: rgb(199, 199, 199);
+    --secondary-light: #{color.adjust(rgb(199, 199, 199), $lightness: 20%)};
+    --bg: #ffebcd;
 }

@@ -36,8 +36,4 @@ router
     /* GET /api/game/highScores - Get highscores */
     .get(asyncHandler(gameController.highScores));
 
-// router.route('/update')
-//     /* GET /api/game/highScores - Get highscores */
-//     .get(gameController.updateScores);
-
 export default router;

@@ -10,15 +10,18 @@ WORKDIR /workspace
 COPY .npmrc package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json tsconfig.base.json tsconfig.json ./
 COPY apps/api/package.json apps/api/package.json
 COPY apps/web/package.json apps/web/package.json
+COPY packages/game-core/package.json packages/game-core/package.json
 COPY packages/contracts/package.json packages/contracts/package.json
 COPY packages/testkit/package.json packages/testkit/package.json
 
 RUN pnpm install --frozen-lockfile
 
 COPY apps/api apps/api
+COPY packages/game-core packages/game-core
 COPY packages/contracts packages/contracts
 
 RUN pnpm --filter @tiles-town/contracts run build
+RUN pnpm --filter @tiles-town/game-core run build
 RUN pnpm --filter @tiles-town/api run build
 
 EXPOSE 4200

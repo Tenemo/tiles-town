@@ -1,14 +1,19 @@
 import { ReactElement, useEffect } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
-import { HistoryRouter as Router } from 'redux-first-history/rr6';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
 import App from 'components/App';
-import { store, history } from 'store';
+import { getAppTheme } from 'store/app/appSelectors';
+import { store, useSelector } from 'store';
 
 import 'styles/global.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
-export const Root = (): ReactElement => {
+export const RootContent = (): ReactElement => {
+    const appTheme = useSelector(getAppTheme);
+
     useEffect(() => {
         // https://stackoverflow.com/questions/31402576/enable-focus-only-on-keyboard-use-or-tab-press
         const onMouseDown = (): void => {
@@ -29,13 +34,24 @@ export const Root = (): ReactElement => {
         };
     }, []);
 
+    useEffect(() => {
+        document.documentElement.dataset.theme = appTheme;
+    }, [appTheme]);
+
+    return (
+        <HelmetProvider>
+            <Router>
+                <App />
+                <ToastContainer theme={appTheme} />
+            </Router>
+        </HelmetProvider>
+    );
+};
+
+export const Root = (): ReactElement => {
     return (
         <Provider store={store}>
-            <HelmetProvider>
-                <Router history={history}>
-                    <App />
-                </Router>
-            </HelmetProvider>
+            <RootContent />
         </Provider>
     );
 };

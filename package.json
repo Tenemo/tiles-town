@@ -22,7 +22,7 @@
     "docker:up": "docker compose up -d --build --wait",
     "docker:destroy": "docker compose down -v",
     "docker:refresh": "pnpm run docker:destroy && pnpm run docker:up",
-    "e2e": "pnpm --filter @tiles-town/contracts run build && pnpm --filter @tiles-town/testkit run build && playwright test",
+    "e2e": "pnpm --filter @tiles-town/contracts run build && pnpm --filter @tiles-town/testkit run build && pnpm run docker:up && playwright test",
     "e2e:install": "playwright install --with-deps",
     "prepare": "husky"
   },
@@ -52,7 +52,6 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "@parcel/watcher",
-      "core-js",
       "esbuild",
       "multiline-ts",
       "unrs-resolver"

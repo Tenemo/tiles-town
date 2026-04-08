@@ -1,56 +1,40 @@
-import { UnknownAction } from 'redux';
-
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import type {
+    HighScore,
+    NewGameResponse,
+    WinGameResponse,
+} from '@tiles-town/contracts';
 import {
-    GameState,
-    GameActionTypes,
-    GAME_REQUEST_ERROR,
-    GAME_REQUEST_SUCCESS,
-    GAME_REQUEST_BEGIN,
-    NEW_GAME_SUCCESS,
-    MAKE_MOVE,
-    WIN_GAME_SUCCESS,
-    UPDATE_ON_CHANGE,
-    GET_HIGH_SCORES_SUCCESS,
-    RESTART_BOARD,
-    LOCK_BOARD,
-    UNLOCK_BOARD,
-} from 'store/game/gameTypes';
-import { updateBoard } from 'utils/helpers';
-
-type NewGameSuccessAction = Extract<
-    GameActionTypes,
-    { type: typeof NEW_GAME_SUCCESS }
->;
-type MakeMoveAction = Extract<GameActionTypes, { type: typeof MAKE_MOVE }>;
-type WinGameSuccessAction = Extract<
-    GameActionTypes,
-    { type: typeof WIN_GAME_SUCCESS }
->;
-type UpdateOnChangeAction = Extract<
-    GameActionTypes,
-    { type: typeof UPDATE_ON_CHANGE }
->;
-type GetHighScoresSuccessAction = Extract<
-    GameActionTypes,
-    { type: typeof GET_HIGH_SCORES_SUCCESS }
->;
+    applyMove,
+    cloneBoard,
+    countActiveTiles,
+    createBoard,
+    parseMoveCoordinates,
+} from '@tiles-town/game-core';
+import { GameState, PreviousGameState } from 'store/game/gameTypes';
 
 const defaultSize = 6;
-const defaultBoard: number[][] = [];
-for (let i = 0; i < defaultSize; i += 1) {
-    defaultBoard.push([]);
-    for (let j = 0; j < defaultSize; j += 1) {
-        defaultBoard[i].push(0);
-    }
-}
+const defaultBoard = createBoard(defaultSize);
+const initialPreviousGameState: PreviousGameState = {
+    size: null,
+    seed: '',
+    moveCount: null,
+    time: null,
+    score: null,
+    gameId: '',
+    easyMode: null,
+    isSeedCustom: null,
+    playerName: '',
+    moves: [],
+};
 
 export const initialGameState: GameState = {
     requestsCount: 0,
-    board: defaultBoard,
-    receivedBoard: [],
+    board: cloneBoard(defaultBoard),
+    receivedBoard: cloneBoard(defaultBoard),
     size: defaultSize,
     newSize: defaultSize,
-    leftCount: null,
+    leftCount: countActiveTiles(defaultBoard),
     playerName: '',
     gameId: '',
     moveCount: 0,
@@ -60,133 +44,103 @@ export const initialGameState: GameState = {
     highScores: [],
     isDisabled: true,
     firstTime: true,
-    previous: {
-        size: null,
-        seed: '',
-        moveCount: null,
-        time: null,
-        score: null,
-        gameId: '',
-        easyMode: null,
-        isSeedCustom: null,
-        playerName: '',
-        moves: [],
-    },
+    previous: initialPreviousGameState,
 };
 
-export const gameReducer = (
-    state = initialGameState,
-    action: GameActionTypes | UnknownAction,
-): GameState => {
-    let newState: GameState;
-    switch (action.type) {
-        case GAME_REQUEST_BEGIN:
-            return {
-                ...state,
-                requestsCount: state.requestsCount + 1,
-            };
-        case GAME_REQUEST_ERROR:
-            return {
-                ...state,
-                requestsCount: state.requestsCount - 1,
-            };
-        case GAME_REQUEST_SUCCESS:
-            return {
-                ...state,
-                requestsCount: state.requestsCount - 1,
-            };
-        case NEW_GAME_SUCCESS: {
-            const newGameAction = action as NewGameSuccessAction;
-            newState = { ...state };
-            newState.board = newGameAction.newGame.board;
-            newState.receivedBoard = JSON.parse(
-                JSON.stringify(newState.board),
-            ) as number[][];
-            newState.gameId = newGameAction.newGame.gameId;
-            newState.size = newGameAction.newGame.size;
-            newState.leftCount = 0;
-            newState.moves = [];
-            newState.moveCount = 0;
-            for (let i = 0; i < newState.board.length; ++i) {
-                for (let j = 0; j < newState.board[i].length; ++j) {
-                    if (newState.board[i][j] === 1) newState.leftCount++;
-                }
-            }
-            newState.firstTime = false;
-            return newState;
-        }
-        case MAKE_MOVE: {
-            const makeMoveAction = action as MakeMoveAction;
-            newState = { ...state };
-            newState.moves = newState.moves.concat(makeMoveAction.move);
-            newState.moveCount += 1;
-            newState = updateBoard(
-                JSON.parse(JSON.stringify(newState)) as GameState,
-                makeMoveAction.move,
+const gameSlice = createSlice({
+    name: 'game',
+    initialState: initialGameState,
+    reducers: {
+        beginRequest: (state) => {
+            state.requestsCount += 1;
+        },
+        requestError: (state) => {
+            state.requestsCount = Math.max(0, state.requestsCount - 1);
+        },
+        requestSuccess: (state) => {
+            state.requestsCount = Math.max(0, state.requestsCount - 1);
+        },
+        replaceGame: (state, action: PayloadAction<NewGameResponse>) => {
+            state.board = cloneBoard(action.payload.board);
+            state.receivedBoard = cloneBoard(action.payload.board);
+            state.gameId = action.payload.gameId;
+            state.size = action.payload.size;
+            state.leftCount = countActiveTiles(state.board);
+            state.moves = [];
+            state.moveCount = 0;
+            state.firstTime = false;
+        },
+        makeMove: (state, action: PayloadAction<string>) => {
+            state.moves.push(action.payload);
+            state.moveCount += 1;
+            applyMove(
+                state.board,
+                parseMoveCoordinates(action.payload, state.size),
             );
-            return newState;
-        }
-        case WIN_GAME_SUCCESS: {
-            const winGameAction = action as WinGameSuccessAction;
-            newState = { ...state };
-            newState.previous = {
-                size: newState.size,
-                seed: winGameAction.game.seed ?? '',
-                moveCount: winGameAction.game.moveCount ?? null,
-                time: winGameAction.game.time ?? null,
-                score: winGameAction.game.score ?? null,
-                gameId: newState.gameId,
-                easyMode: newState.easyMode,
-                isSeedCustom: winGameAction.game.isSeedCustom ?? null,
-                playerName: newState.playerName,
-                moves: [],
+            state.leftCount = countActiveTiles(state.board);
+        },
+        storeWin: (state, action: PayloadAction<WinGameResponse>) => {
+            state.previous = {
+                size: state.size,
+                seed: action.payload.seed ?? '',
+                moveCount: action.payload.moveCount ?? null,
+                time: action.payload.time ?? null,
+                score: action.payload.score ?? null,
+                gameId: state.gameId,
+                easyMode: state.easyMode,
+                isSeedCustom: action.payload.isSeedCustom ?? null,
+                playerName: state.playerName,
+                moves: [...state.moves],
             };
-            newState.previous.moves = JSON.parse(
-                JSON.stringify(newState.moves),
-            ) as string[];
-            newState.moves = [];
-            newState.moveCount = 0;
-            newState.gameId = '';
-            return newState;
-        }
-        case UPDATE_ON_CHANGE: {
-            const updateOnChangeAction = action as UpdateOnChangeAction;
-            newState = {
-                ...state,
-                [updateOnChangeAction.name]: updateOnChangeAction.value,
-            } as GameState;
-            return newState;
-        }
-        case GET_HIGH_SCORES_SUCCESS: {
-            const getHighScoresSuccessAction =
-                action as GetHighScoresSuccessAction;
-            newState = { ...state };
-            newState.highScores = getHighScoresSuccessAction.highScores;
-            return newState;
-        }
-        case RESTART_BOARD:
-            newState = { ...state };
-            newState.board = JSON.parse(
-                JSON.stringify(newState.receivedBoard),
-            ) as number[][];
-            newState.moves = [];
-            newState.moveCount = 0;
-            newState.leftCount = 0;
-            for (let i = 0; i < newState.board.length; ++i) {
-                for (let j = 0; j < newState.board[i].length; ++j) {
-                    if (newState.board[i][j] === 1) newState.leftCount++;
-                }
-            }
-            return newState;
-        case LOCK_BOARD:
-            newState = { ...state };
-            newState.isDisabled = true;
-            return newState;
-        case UNLOCK_BOARD:
-            newState = { ...state };
-            newState.isDisabled = false;
-            return newState;
-        default:
-            return state;
-    }
-};
+            state.moves = [];
+            state.moveCount = 0;
+            state.gameId = '';
+        },
+        restartBoard: (state) => {
+            state.board = cloneBoard(state.receivedBoard);
+            state.moves = [];
+            state.moveCount = 0;
+            state.leftCount = countActiveTiles(state.board);
+        },
+        lockBoard: (state) => {
+            state.isDisabled = true;
+        },
+        unlockBoard: (state) => {
+            state.isDisabled = false;
+        },
+        setPlayerName: (state, action: PayloadAction<string>) => {
+            state.playerName = action.payload;
+        },
+        setSeed: (state, action: PayloadAction<string>) => {
+            state.seed = action.payload;
+        },
+        setEasyMode: (state, action: PayloadAction<boolean>) => {
+            state.easyMode = action.payload;
+        },
+        setNewSize: (state, action: PayloadAction<number>) => {
+            state.newSize = action.payload;
+        },
+        setHighScores: (state, action: PayloadAction<HighScore[]>) => {
+            state.highScores = action.payload;
+        },
+    },
+});
+
+export const {
+    beginRequest,
+    lockBoard,
+    makeMove,
+    replaceGame,
+    requestError,
+    requestSuccess,
+    restartBoard,
+    setEasyMode,
+    setHighScores,
+    setNewSize,
+    setPlayerName,
+    setSeed,
+    storeWin,
+    unlockBoard,
+} = gameSlice.actions;
+
+export const gameReducer = gameSlice.reducer;

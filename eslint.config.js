@@ -45,6 +45,7 @@ const importSettings = {
             project: [
                 './apps/web/tsconfig.json',
                 './apps/api/tsconfig.json',
+                './packages/game-core/tsconfig.eslint.json',
                 './packages/contracts/tsconfig.json',
                 './packages/testkit/tsconfig.json',
                 './tsconfig.eslint.json',
@@ -157,7 +158,6 @@ module.exports = [
             '**/.turbo/**',
             '.tmp/**',
             'temp/**',
-            'archive/**',
             'playwright-report/**',
             'test-results/**',
         ],
@@ -272,6 +272,12 @@ module.exports = [
                 },
             ],
         },
+    }),
+    createTypeScriptConfig({
+        files: ['packages/game-core/**/*.ts'],
+        packageDir: path.join(__dirname, 'packages/game-core'),
+        project: ['./packages/game-core/tsconfig.eslint.json'],
+        extraGlobals: globals.vitest,
     }),
     createTypeScriptConfig({
         files: ['packages/contracts/**/*.ts'],

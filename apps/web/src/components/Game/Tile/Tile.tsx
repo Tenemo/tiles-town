@@ -1,41 +1,40 @@
 import { ReactElement, MouseEvent } from 'react';
+import {
+    TileState,
+    formatMoveCoordinates,
+    isPlayableTile,
+} from '@tiles-town/game-core';
 
 import styles from './tile.module.scss';
 
-import { numToAlpha } from 'utils/helpers';
-
 type Props = {
-    type: number;
-    coords: [number, number] | [number];
-    size: number | string;
+    tile: number;
+    rowIndex: number;
+    columnIndex: number;
+    size: number;
     onMoveClick: (event: MouseEvent<HTMLElement>) => void;
     isDisabled: boolean;
 };
 
 const Tile = ({
-    type,
-    coords,
+    tile,
+    rowIndex,
+    columnIndex,
     size,
     onMoveClick,
     isDisabled,
 }: Props): ReactElement => {
-    const isInteractive = !isDisabled && (type === 0 || type === 1);
-    const typeClass = ((): string => {
-        switch (type) {
-            case 0:
-                return styles.flipped;
-            case 2:
-                return styles.inactive;
-            case 3:
-            case 4:
-                return `${styles.coords} d-none d-sm-block`;
-            case 1:
-            default:
-                return styles.active;
-        }
-    })();
-    const numSize = typeof size === 'number' ? size : parseInt(size, 10);
-    const alphanumericCoords = numToAlpha(coords, numSize, type);
+    const isInteractive = !isDisabled && isPlayableTile(tile);
+    const typeClass =
+        tile === TileState.Flipped
+            ? styles.flipped
+            : tile === TileState.Blocked
+              ? styles.inactive
+              : styles.active;
+    const alphanumericCoords = formatMoveCoordinates(
+        [columnIndex, rowIndex],
+        size,
+    );
     return (
         <div
             className={`${styles.tile} ${

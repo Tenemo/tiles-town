@@ -153,6 +153,25 @@ describe('game routes', () => {
         expect(body.message).toContain('moves');
     });
 
+    it('rejects syntactically valid moves that fall outside the current board', async () => {
+        const newGameResponse = await createGame(app, {
+            size: 4,
+        });
+        const newGame = parseBody<NewGameResponse>(newGameResponse);
+
+        expect(newGameResponse.status).toBe(200);
+
+        const response = await winGame(app, newGame.gameId, {
+            moves: ['P16'],
+            playerName: 'outside-board',
+        });
+
+        expect(response.status).toBe(400);
+        expect(parseBody<WinGameResponse>(response)).toMatchObject({
+            info: 'Illegal move sequence',
+        });
+    });
+
     it('stores a trimmed player name and reports repeat wins without mutating it', async () => {
         const newGameResponse = await createGame(app, {
             size: 4,

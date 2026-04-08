@@ -13,6 +13,7 @@
         "noEmit": true,
         "paths": {
             "@tiles-town/contracts": ["../../packages/contracts/src/index.ts"],
+            "@tiles-town/game-core": ["../../packages/game-core/src/index.ts"],
             "components/*": ["./src/components/*"],
             "constants/*": ["./src/constants/*"],
             "fonts/*": ["./src/fonts/*"],

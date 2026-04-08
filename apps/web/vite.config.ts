@@ -17,6 +17,10 @@ export default defineConfig({
                 __dirname,
                 '../../packages/contracts/src/index.ts',
             ),
+            '@tiles-town/game-core': path.resolve(
+                __dirname,
+                '../../packages/game-core/src/index.ts',
+            ),
             components: path.resolve(srcRoot, 'components'),
             constants: path.resolve(srcRoot, 'constants'),
             fonts: path.resolve(srcRoot, 'fonts'),
@@ -62,11 +66,14 @@ export default defineConfig({
                         return 'sentry';
                     }
 
-                    if (id.includes('react-router') || id.includes('history')) {
+                    if (id.includes('react-router')) {
                         return 'router-vendor';
                     }
 
-                    if (id.includes('redux') || id.includes('reselect')) {
+                    if (
+                        id.includes('@reduxjs/toolkit') ||
+                        id.includes('react-redux')
+                    ) {
                         return 'state-vendor';
                     }
 

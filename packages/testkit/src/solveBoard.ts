@@ -1,28 +1,8 @@
-const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+import { formatMoveCoordinates, isPlayableTile } from '@tiles-town/game-core';
 
 type Position = {
     row: number;
     column: number;
-};
-
-const isPlayable = (tile: number): boolean => tile === 0 || tile === 1;
-
-const intToLetter = (numberInput: number): string => {
-    const base = ALPHABET.length;
-    const digits: number[] = [];
-    let leftover = numberInput + 1;
-
-    do {
-        leftover -= 1;
-        const value = leftover % base;
-        digits.push(value);
-        leftover = Math.floor(leftover / base);
-    } while (leftover > 0);
-
-    return digits
-        .reverse()
-        .map((digit) => ALPHABET[digit])
-        .join('');
 };
 
 const affects = (move: Position, target: Position): boolean =>
@@ -30,14 +10,14 @@ const affects = (move: Position, target: Position): boolean =>
     1;
 
 const toMoveNotation = ({ row, column }: Position, size: number): string =>
-    `${intToLetter(column)}${size - row}`;
+    formatMoveCoordinates([column, row], size);
 
 export const solveBoard = (board: number[][]): string[] => {
     const playableTiles: Position[] = [];
 
     board.forEach((row, rowIndex) => {
         row.forEach((tile, columnIndex) => {
-            if (isPlayable(tile)) {
+            if (isPlayableTile(tile)) {
                 playableTiles.push({
                     row: rowIndex,
                     column: columnIndex,

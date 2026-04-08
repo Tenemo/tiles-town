@@ -1,6 +1,6 @@
 import { solveBoard } from '@tiles-town/testkit';
+import { formatMoveCoordinates } from '@tiles-town/game-core';
 import type { GameAttributes } from '../../models/game.model';
-import { intToLetter } from '../../utils/helpers';
 import { checkMoves, flip } from './checkMoves';
 import { generateBoard } from './generateBoard';
 
@@ -24,7 +24,7 @@ describe('checkMoves', () => {
         expect(flip(0)).toBe(1);
         expect(flip(1)).toBe(0);
         expect(flip(2)).toBe(2);
-        expect(() => flip(3)).toThrow('Wrong tile value to flip: 3');
+        expect(() => flip(3)).toThrow('Unsupported tile value: 3');
     });
 
     it('accepts a generated winning solution for a deterministic board', () => {
@@ -59,9 +59,10 @@ describe('checkMoves', () => {
 
         expect(blockedTile).toBeDefined();
 
-        const blockedMove = `${intToLetter(blockedTile!.columnIndex)}${
-            board.length - blockedTile!.rowIndex
-        }`;
+        const blockedMove = formatMoveCoordinates(
+            [blockedTile!.columnIndex, blockedTile!.rowIndex],
+            board.length,
+        );
 
         expect(() =>
             checkMoves(

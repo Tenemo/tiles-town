@@ -7,7 +7,6 @@ dist
 .husky
 .turbo
 **/.turbo
-archive
 temp
 playwright-report
 test-results

@@ -1,5 +1,4 @@
 import { Sequelize } from 'sequelize';
-import _ from 'lodash';
 import { initGame } from './models/game.model';
 import { config } from './config';
 import { logger } from './logging';
@@ -42,10 +41,8 @@ export const closeDatabase = async (): Promise<void> => {
     await sequelize.close();
 };
 
-export default _.extend(
-    {
-        sequelize,
-        Sequelize,
-    },
-    { game },
-);
+export default {
+    sequelize,
+    Sequelize,
+    game,
+};

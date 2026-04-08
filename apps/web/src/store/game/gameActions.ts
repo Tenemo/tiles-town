@@ -7,23 +7,25 @@ import {
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+import type { AppThunk } from 'store';
 import { getGame } from 'store/game/gameSelectors';
 import {
-    GameState,
-    GameActionTypes,
-    GAME_REQUEST_ERROR,
-    GAME_REQUEST_BEGIN,
-    GAME_REQUEST_SUCCESS,
-    NEW_GAME_SUCCESS,
-    MAKE_MOVE,
-    WIN_GAME_SUCCESS,
-    UPDATE_ON_CHANGE,
-    GET_HIGH_SCORES_SUCCESS,
-    RESTART_BOARD,
-    LOCK_BOARD,
-    UNLOCK_BOARD,
-} from 'store/game/gameTypes';
-import { CommonDispatch, RootState } from 'store/types';
+    beginRequest,
+    lockBoard,
+    makeMove,
+    replaceGame,
+    requestError,
+    requestSuccess,
+    restartBoard,
+    setEasyMode,
+    setHighScores,
+    setNewSize,
+    setPlayerName,
+    setSeed,
+    storeWin,
+    unlockBoard,
+} from 'store/game/gameReducer';
+import { GameState } from 'store/game/gameTypes';
 import request from 'utils/request';
 
 const hasMessage = (value: unknown): value is { message: string } =>
@@ -62,70 +64,28 @@ const getRequestErrorMessage = (error: unknown): string => {
     return String(error);
 };
 
-export const requestSuccess = (): GameActionTypes => ({
-    type: GAME_REQUEST_SUCCESS,
-});
-
-export const beginRequest = (): GameActionTypes => ({
-    type: GAME_REQUEST_BEGIN,
-});
-
-export const requestError = (): GameActionTypes => ({
-    type: GAME_REQUEST_ERROR,
-});
-
-export const unlockBoard = (): GameActionTypes => ({
-    type: UNLOCK_BOARD,
-});
-
-export const lockBoard = (): GameActionTypes => ({
-    type: LOCK_BOARD,
-});
-
-export const restartBoard = (): GameActionTypes => ({
-    type: RESTART_BOARD,
-});
-
-export const newGameSuccess = (newGame: NewGameResponse): GameActionTypes => ({
-    type: NEW_GAME_SUCCESS,
-    newGame,
-});
-
-export const makeMove = (move: string): GameActionTypes => ({
-    type: MAKE_MOVE,
-    move,
-});
-
-export const winGameSuccess = (game: WinGameResponse): GameActionTypes => ({
-    type: WIN_GAME_SUCCESS,
-    game,
-});
-
-export const updateOnChange = (
-    name: string,
-    value: string | boolean | number,
-): GameActionTypes => ({
-    type: UPDATE_ON_CHANGE,
-    name,
-    value,
-});
-
-export const getHighScoresSuccess = (
-    highScores: HighScore[],
-): GameActionTypes => ({
-    type: GET_HIGH_SCORES_SUCCESS,
-    highScores,
-});
+export {
+    beginRequest,
+    lockBoard,
+    requestError,
+    requestSuccess,
+    restartBoard,
+    setEasyMode,
+    setNewSize,
+    setPlayerName,
+    setSeed,
+    unlockBoard,
+};
 
 export const getHighScores =
-    () =>
-    async (dispatch: CommonDispatch): Promise<void> => {
+    (): AppThunk<Promise<void>> =>
+    async (dispatch): Promise<void> => {
         dispatch(beginRequest());
         try {
             const response = await request.get<HighScore[]>(
                 GAME_ROUTES.highScores,
             );
-            dispatch(getHighScoresSuccess(response.data));
+            dispatch(setHighScores(response.data));
             dispatch(requestSuccess());
         } catch (error) {
             dispatch(requestError());
@@ -139,33 +99,35 @@ export const getHighScores =
     };
 
 export const newGame =
-    (newSize: number, easyMode: boolean, seed: string, previousId: string) =>
-    async (dispatch: CommonDispatch): Promise<void> => {
+    (
+        newSize: number,
+        easyMode: boolean,
+        seed: string,
+        previousId: string,
+    ): AppThunk<Promise<void>> =>
+    async (dispatch): Promise<void> => {
         dispatch(lockBoard());
         dispatch(beginRequest());
         try {
             const response = await request.post<NewGameResponse>(
                 GAME_ROUTES.newGame,
-                JSON.stringify({
+                {
                     size: newSize,
                     easyMode,
                     seed,
                     previousId,
-                }),
+                },
                 {
                     timeout: 5000,
-                    headers: {
-                        'Content-type': 'application/json; charset=UTF-8',
-                    },
                 },
             );
             toast.success('New game loaded!', {
                 autoClose: 1000,
                 closeButton: false,
             });
-            dispatch(newGameSuccess(response.data));
+            dispatch(replaceGame(response.data));
             dispatch(requestSuccess());
-            // wait for DOM a tiny bit to prevent flip animation, otherwise it bugs out
+            // Wait for the rendered board to settle so the next click does not skip animations.
             setTimeout(() => dispatch(unlockBoard()), 20);
         } catch (error) {
             dispatch(requestError());
@@ -177,24 +139,18 @@ export const newGame =
     };
 
 export const winGame =
-    (game: GameState) =>
-    async (dispatch: CommonDispatch): Promise<void> => {
+    (game: GameState): AppThunk<Promise<void>> =>
+    async (dispatch): Promise<void> => {
         dispatch(beginRequest());
 
         try {
             const response = await request.put<WinGameResponse>(
                 GAME_ROUTES.winGame(game.gameId),
-                JSON.stringify({
-                    moves: game.moves,
-                    playerName: (() => {
-                        if (!game.playerName) return 'anonymous';
-                        return game.playerName;
-                    })(),
-                }),
                 {
-                    headers: {
-                        'Content-type': 'application/json; charset=UTF-8',
-                    },
+                    moves: game.moves,
+                    playerName: game.playerName,
+                },
+                {
                     timeout: 20000,
                 },
             );
@@ -207,7 +163,7 @@ export const winGame =
                 autoClose: 2000,
             });
             dispatch(lockBoard());
-            dispatch(winGameSuccess(receivedGame));
+            dispatch(storeWin(receivedGame));
             dispatch(requestSuccess());
             void dispatch(getHighScores());
         } catch (error) {
@@ -222,8 +178,8 @@ export const winGame =
     };
 
 export const makeMoveCheckWin =
-    (coords: string) =>
-    (dispatch: CommonDispatch, getState: () => RootState): void => {
+    (coords: string): AppThunk =>
+    (dispatch, getState): void => {
         dispatch(makeMove(coords));
         const game = getGame(getState());
         if (game.leftCount === 0) {

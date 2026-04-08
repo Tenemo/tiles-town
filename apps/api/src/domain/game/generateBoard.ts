@@ -1,15 +1,19 @@
-import md5 from 'md5';
+import { randomBytes } from 'node:crypto';
 import seedrandom from 'seedrandom';
-import { flip } from './checkMoves';
+import { applyMove, createBoard, isPlayableTile } from '@tiles-town/game-core';
 
-interface Board {
+interface GeneratedBoard {
     size: number;
     tiles: number[][];
     blankCount?: number;
     seed: string;
 }
 
-const generateCross = (board: Board, y: number, x: number): Board => {
+const generateCross = (
+    board: GeneratedBoard,
+    y: number,
+    x: number,
+): GeneratedBoard => {
     if (!board.blankCount) {
         throw new Error('Missing blankCount.');
     }
@@ -92,7 +96,7 @@ const generateCross = (board: Board, y: number, x: number): Board => {
     return board;
 };
 
-const nextStep = (board: Board, rng: () => number): Board => {
+const nextStep = (board: GeneratedBoard, rng: () => number): GeneratedBoard => {
     if (!board.blankCount) {
         throw new Error('Missing blankCount.');
     }
@@ -126,46 +130,16 @@ const nextStep = (board: Board, rng: () => number): Board => {
     return board;
 };
 
-const hardMode = (board: Board, rng: () => number): Board => {
+const hardMode = (board: GeneratedBoard, rng: () => number): GeneratedBoard => {
     const moveCount = board.size * board.size * 2;
-    const move: [number, number] = [0, 0];
 
     for (let index = 0; index < moveCount; index += 1) {
         const randomY = Math.floor(rng() * board.size);
         const randomX = Math.floor(rng() * board.size);
+        const move: [number, number] = [randomY, randomX];
 
-        move[0] = randomY;
-        move[1] = randomX;
-
-        if (
-            board.tiles[move[1]][move[0]] === 1 ||
-            board.tiles[move[1]][move[0]] === 0
-        ) {
-            board.tiles[move[1]][move[0]] = flip(board.tiles[move[1]][move[0]]);
-
-            if (move[1] + 1 <= board.tiles.length - 1) {
-                board.tiles[move[1] + 1][move[0]] = flip(
-                    board.tiles[move[1] + 1][move[0]],
-                );
-            }
-
-            if (move[0] + 1 <= board.tiles.length - 1) {
-                board.tiles[move[1]][move[0] + 1] = flip(
-                    board.tiles[move[1]][move[0] + 1],
-                );
-            }
-
-            if (move[1] - 1 >= 0) {
-                board.tiles[move[1] - 1][move[0]] = flip(
-                    board.tiles[move[1] - 1][move[0]],
-                );
-            }
-
-            if (move[0] - 1 >= 0) {
-                board.tiles[move[1]][move[0] - 1] = flip(
-                    board.tiles[move[1]][move[0] - 1],
-                );
-            }
+        if (isPlayableTile(board.tiles[move[1]][move[0]])) {
+            applyMove(board.tiles, move);
         }
     }
 
@@ -176,25 +150,17 @@ export const generateBoard = (
     size: number,
     seed?: string,
     easyMode = false,
-): Board => {
-    const resolvedSeed =
-        seed ?? md5(`${Date.now() + size + Math.random()}`).slice(0, -16);
+): GeneratedBoard => {
+    const resolvedSeed = seed ?? randomBytes(16).toString('hex');
 
-    let board: Board = {
+    let board: GeneratedBoard = {
         size,
-        tiles: [],
+        tiles: createBoard(size, -1),
         blankCount: size * size,
         seed: resolvedSeed,
     };
 
     const rng = seedrandom(resolvedSeed);
-
-    for (let row = 0; row < size; row += 1) {
-        board.tiles[row] = [];
-        for (let column = 0; column < size; column += 1) {
-            board.tiles[row][column] = -1;
-        }
-    }
 
     while (board.blankCount) {
         board = nextStep(board, rng);

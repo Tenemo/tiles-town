@@ -8,6 +8,7 @@
         "baseUrl": ".",
         "paths": {
             "@tiles-town/contracts": ["./packages/contracts/src/index.ts"],
+            "@tiles-town/game-core": ["./packages/game-core/src/index.ts"],
             "@tiles-town/testkit": ["./packages/testkit/src/index.ts"]
         }
     },

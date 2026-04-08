@@ -1,104 +1,33 @@
-import type {
-    HighScore,
-    NewGameResponse,
-    WinGameResponse,
-} from '@tiles-town/contracts';
+import type { HighScore } from '@tiles-town/contracts';
 
-export const NEW_GAME_SUCCESS = 'NEW_GAME_SUCCESS';
-export const MAKE_MOVE = 'MAKE_MOVE';
-export const WIN_GAME_SUCCESS = 'WIN_GAME_SUCCESS';
-export const UPDATE_ON_CHANGE = 'UPDATE_ON_CHANGE';
-export const GET_HIGH_SCORES_SUCCESS = 'GET_HIGH_SCORES_SUCCESS';
-export const RESTART_BOARD = 'RESTART_BOARD';
-export const LOCK_BOARD = 'LOCK_BOARD';
-export const UNLOCK_BOARD = 'UNLOCK_BOARD';
-export const GAME_REQUEST_ERROR = 'GAME_REQUEST_ERROR';
-export const GAME_REQUEST_BEGIN = 'GAME_REQUEST_BEGIN';
-export const GAME_REQUEST_SUCCESS = 'GAME_REQUEST_SUCCESS';
+export type PreviousGameState = {
+    size: number | null;
+    seed: string;
+    moveCount: number | null;
+    time: number | null;
+    score: number | null;
+    gameId: string;
+    easyMode: boolean | null;
+    isSeedCustom: boolean | null;
+    playerName: string;
+    moves: string[];
+};
 
-// TODO: remove | nulls, add proper initial values
 export type GameState = {
     requestsCount: number;
     board: number[][];
     receivedBoard: number[][];
     size: number;
     newSize: number;
-    leftCount: number | null;
+    leftCount: number;
     playerName: string;
     gameId: string;
     moveCount: number;
     moves: string[];
     seed: string;
-    time?: number;
-    score?: number;
-    isSeedCustom?: boolean;
     easyMode: boolean;
     highScores: HighScore[];
     isDisabled: boolean;
     firstTime: boolean;
-    previous: {
-        size: number | null;
-        seed: string;
-        moveCount: number | null;
-        time: number | null;
-        score: number | null;
-        gameId: string;
-        easyMode: boolean | null;
-        isSeedCustom: boolean | null;
-        playerName: string;
-        moves: string[];
-    };
+    previous: PreviousGameState;
 };
-
-type gameRequestBeginAction = {
-    type: typeof GAME_REQUEST_BEGIN;
-};
-type gameRequestErrorAction = {
-    type: typeof GAME_REQUEST_ERROR;
-};
-type gameRequestSuccessAction = {
-    type: typeof GAME_REQUEST_SUCCESS;
-};
-type newGameSuccessAction = {
-    type: typeof NEW_GAME_SUCCESS;
-    newGame: NewGameResponse;
-};
-type unlockBoardAction = {
-    type: typeof UNLOCK_BOARD;
-};
-type lockBoardAction = {
-    type: typeof LOCK_BOARD;
-};
-type makeMoveAction = {
-    type: typeof MAKE_MOVE;
-    move: string;
-};
-type winGameSuccessAction = {
-    type: typeof WIN_GAME_SUCCESS;
-    game: WinGameResponse;
-};
-type updateOnChangeAction = {
-    type: typeof UPDATE_ON_CHANGE;
-    name: string;
-    value: string | boolean | number;
-};
-type getHighScoresSuccessAction = {
-    type: typeof GET_HIGH_SCORES_SUCCESS;
-    highScores: HighScore[];
-};
-type restartBoardAction = {
-    type: typeof RESTART_BOARD;
-};
-
-export type GameActionTypes =
-    | gameRequestBeginAction
-    | gameRequestErrorAction
-    | gameRequestSuccessAction
-    | newGameSuccessAction
-    | unlockBoardAction
-    | lockBoardAction
-    | makeMoveAction
-    | winGameSuccessAction
-    | updateOnChangeAction
-    | getHighScoresSuccessAction
-    | restartBoardAction;

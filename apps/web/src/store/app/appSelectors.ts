@@ -1,7 +1,5 @@
-import { createSelector } from 'reselect';
-
-import { AppState } from 'store/app/appTypes';
-import { RootState } from 'store/types';
+import { RootState } from 'store';
+import { AppState, AppTheme } from './appTypes';
 
 export const getApp = (state: RootState): AppState => state.app;
-export const getAppTheme = createSelector(getApp, (app) => app.theme);
+export const getAppTheme = (state: RootState): AppTheme => state.app.theme;

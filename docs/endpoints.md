@@ -54,7 +54,7 @@ OK
 ```
 
 - alternate success responses:
-- `200` with `{ "info": "Game doesn't exist" }` when the game id is unknown
+- `404` with `{ "info": "Game doesn't exist" }` when the game id is unknown
 - `200` with `info`, `isWon`, and `score` when the game was already completed
 
 - failure responses:

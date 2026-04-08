@@ -1,0 +1,14 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "ignoreDeprecations": "6.0",
+        "declaration": true,
+        "declarationMap": true,
+        "types": ["node", "vitest/globals"]
+    },
+    "include": ["src/**/*"]
+}

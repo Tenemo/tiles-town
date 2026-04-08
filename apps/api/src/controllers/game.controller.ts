@@ -11,8 +11,6 @@ import {
     completeGame,
     createNewGame,
     fetchHighScores,
-    generateFakeData,
-    updateScores as updateStoredScores,
 } from '../services/game.service';
 
 const newGame = async (
@@ -44,24 +42,8 @@ const highScores = async (
     res.json(scores);
 };
 
-const updateScoresHandler = async (
-    _req: Request,
-    res: Response,
-): Promise<void> => {
-    const result = await updateStoredScores();
-    res.send(result);
-};
-
-/**
- * - for testing with a database of random entries
- */
-export const fakeData = async (_req: Request, res: Response): Promise<void> => {
-    const result = await generateFakeData();
-    res.send(result);
-};
 export default {
     newGame,
     winGame,
     highScores,
-    updateScores: updateScoresHandler,
 };

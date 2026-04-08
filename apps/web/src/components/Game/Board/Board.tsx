@@ -1,5 +1,7 @@
 import { ReactElement, MouseEvent } from 'react';
+import { intToLetter } from '@tiles-town/game-core';
 
+import BoardAxisLabel from './BoardAxisLabel';
 import Tile from '../Tile';
 
 import styles from './board.module.scss';
@@ -11,51 +13,35 @@ type Props = {
     onMoveClick: (event: MouseEvent<HTMLElement>) => void;
 };
 
-const noop = (_event: MouseEvent<HTMLElement>): void => undefined;
-
 const Board = ({ game, onMoveClick }: Props): ReactElement => {
+    const columnLabels = Array.from({ length: game.size }, (_, columnIndex) =>
+        intToLetter(columnIndex),
+    );
+
     return (
         <section>
-            {game.board.map((row, i) => (
-                <div className={styles.boardRow} key={i}>
-                    {/* type 3 are left coord tiles */}
-                    <Tile
-                        coords={[i]}
-                        isDisabled={false}
-                        key={`${i}_coord`}
-                        onMoveClick={noop}
-                        size={game.size}
-                        type={3}
-                    />
+            {game.board.map((row, rowIndex) => (
+                <div className={styles.boardRow} key={rowIndex}>
+                    <BoardAxisLabel value={(game.size - rowIndex).toString()} />
                     {row.map((type, j) => (
                         <Tile
-                            coords={[i, j]}
+                            columnIndex={j}
                             isDisabled={game.isDisabled}
-                            key={`${i}_${j}`}
+                            key={`${rowIndex}_${j}`}
                             onMoveClick={onMoveClick}
+                            rowIndex={rowIndex}
                             size={game.size}
-                            type={type}
+                            tile={type}
                         />
                     ))}
                 </div>
             ))}
             <div className={styles.boardRow}>
-                <Tile
-                    coords={[-1, -1]}
-                    isDisabled={false}
-                    onMoveClick={noop}
-                    size={game.size}
-                    type={4}
-                />
-                {game.board[0].map((_type, k) => (
-                    // type 4 are bottom coord tiles
-                    <Tile
-                        coords={[k]}
-                        isDisabled={false}
-                        key={`${k}_coord`}
-                        onMoveClick={noop}
-                        size={game.size}
-                        type={4}
+                <BoardAxisLabel value="" />
+                {columnLabels.map((label, columnIndex) => (
+                    <BoardAxisLabel
+                        key={`${columnIndex}_coord`}
+                        value={label}
                     />
                 ))}
             </div>

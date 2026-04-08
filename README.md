@@ -15,6 +15,7 @@ rewritten to TypeScript and now maintained as a pnpm + Turbo monorepo.
 
 - `apps/web` contains the React frontend.
 - `apps/api` contains the Express API.
+- `packages/game-core` contains shared board mechanics and coordinate helpers.
 - `packages/contracts` contains shared runtime schemas, route constants, and
   TypeScript types.
 - `packages/testkit` contains shared board-solving helpers for integration and

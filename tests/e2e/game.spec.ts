@@ -1,5 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { GAME_ROUTES, type NewGameResponse } from '@tiles-town/contracts';
+import {
+    GAME_ROUTES,
+    type NewGameResponse,
+    type WinGameResponse,
+} from '@tiles-town/contracts';
 import { solveBoard } from '@tiles-town/testkit';
 import { createBrowserErrorTracker } from './support/errorTracking';
 
@@ -36,9 +40,8 @@ test.describe('tiles town', () => {
         errorTracker.assertClean();
     });
 
-    test('completes a game and shows the result on the scoreboard', async ({
+    test('completes a game through the browser and shows the result on the scoreboard', async ({
         page,
-        request,
     }) => {
         const errorTracker = createBrowserErrorTracker();
         errorTracker.attachToPage(page, 'game-win');
@@ -62,22 +65,44 @@ test.describe('tiles town', () => {
         const newGameResponse = await newGameResponsePromise;
         const body = (await newGameResponse.json()) as NewGameResponse;
         const winningMoves = solveBoard(body.board);
-        const winResponse = await request.put(
-            GAME_ROUTES.winGame(body.gameId),
-            {
-                data: {
-                    moves: winningMoves,
-                    playerName,
-                },
-            },
-        );
 
-        expect(winResponse.ok()).toBeTruthy();
+        for (const move of winningMoves) {
+            await page.locator(`button[data-coords="${move}"]`).first().click();
+        }
 
-        await page.reload();
         await expect(
             page.getByRole('cell', { name: playerName }),
         ).toBeVisible();
         errorTracker.assertClean();
+    });
+
+    test('rejects out-of-range moves with a stable client error', async ({
+        request,
+    }) => {
+        const newGameResponse = await request.post(GAME_ROUTES.newGame, {
+            data: {
+                size: 4,
+            },
+        });
+        const body = (await newGameResponse.json()) as NewGameResponse;
+
+        expect(newGameResponse.ok()).toBeTruthy();
+
+        const invalidMoveResponse = await request.put(
+            GAME_ROUTES.winGame(body.gameId),
+            {
+                data: {
+                    moves: ['P16'],
+                    playerName: 'playwright-regression',
+                },
+            },
+        );
+        const invalidMoveBody =
+            (await invalidMoveResponse.json()) as WinGameResponse;
+
+        expect(invalidMoveResponse.status()).toBe(400);
+        expect(invalidMoveBody).toMatchObject({
+            info: 'Illegal move sequence',
+        });
     });
 });

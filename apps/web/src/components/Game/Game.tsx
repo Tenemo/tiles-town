@@ -12,9 +12,12 @@ import Tile from './Tile';
 import { useSelector, useDispatch } from 'store';
 import {
     newGame,
-    updateOnChange,
     makeMoveCheckWin,
     restartBoard,
+    setEasyMode,
+    setNewSize,
+    setPlayerName,
+    setSeed,
 } from 'store/game/gameActions';
 import { getGame } from 'store/game/gameSelectors';
 
@@ -41,18 +44,26 @@ export const Game = (): ReactElement => {
     const updateGameState = (
         event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>,
     ): void => {
-        const { name } = event.currentTarget;
-        let value: string | boolean | number =
-            event.currentTarget instanceof HTMLInputElement &&
-            event.currentTarget.type === 'checkbox'
-                ? event.currentTarget.checked
-                : event.currentTarget?.value;
+        const { currentTarget } = event;
 
-        if (name === 'newSize') {
-            value = Number(value);
+        switch (currentTarget.name) {
+            case 'playerName':
+                dispatch(setPlayerName(currentTarget.value));
+                break;
+            case 'seed':
+                dispatch(setSeed(currentTarget.value));
+                break;
+            case 'easyMode':
+                if (currentTarget instanceof HTMLInputElement) {
+                    dispatch(setEasyMode(currentTarget.checked));
+                }
+                break;
+            case 'newSize':
+                dispatch(setNewSize(Number(currentTarget.value)));
+                break;
+            default:
+                break;
         }
-
-        dispatch(updateOnChange(name, value));
     };
 
     const onRestartClick = (event: MouseEvent<HTMLElement>): void => {
@@ -81,21 +92,23 @@ export const Game = (): ReactElement => {
                                 </p>
                                 <div className={styles.example}>
                                     <Tile
-                                        coords={[3, 0]}
+                                        columnIndex={3}
                                         isDisabled
                                         onMoveClick={noop}
+                                        rowIndex={0}
                                         size={8}
-                                        type={1}
+                                        tile={1}
                                     />
                                     &nbsp;
                                     <FontAwesomeIcon icon={faArrowRight} />
                                     &nbsp;
                                     <Tile
-                                        coords={[3, 0]}
+                                        columnIndex={3}
                                         isDisabled
                                         onMoveClick={noop}
+                                        rowIndex={0}
                                         size={8}
-                                        type={0}
+                                        tile={0}
                                     />
                                 </div>
                                 <p className={styles.boldTip}>
