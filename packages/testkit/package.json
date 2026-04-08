@@ -6,10 +6,10 @@
     "types": "dist/index.d.ts",
     "scripts": {
         "clean": "pnpm exec rimraf dist",
-        "build": "pnpm --filter @tiles-town/game-core run build && pnpm run clean && tsc --project tsconfig.json",
+        "build": "pnpm --filter @tiles-town/game-core run build:deps && pnpm run clean && tsc --project tsconfig.json",
         "lint": "pnpm exec eslint src --ext ts",
         "lint:fix": "pnpm exec eslint src --ext ts --fix",
-        "typecheck": "pnpm --filter @tiles-town/game-core run build && tsc --project tsconfig.json --noEmit",
+        "typecheck": "pnpm --filter @tiles-town/game-core run build:deps && tsc --project tsconfig.json --noEmit",
         "test": "echo \"No standalone tests for testkit\""
     },
     "dependencies": {

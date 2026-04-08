@@ -20,18 +20,8 @@ If you only want to run the frontend:
 pnpm --filter @tiles-town/web run dev
 ```
 
-The web app expects the API at `VITE_API_BASE_URL`. When that variable is not
-set, the app uses `/api`, and the local Vite server proxies those requests to
-`http://127.0.0.1:4200`.
-
-## Environment
-
-- `VITE_API_BASE_URL`
-  Set this for deployed builds when the API is served from a different origin.
-  For local development the default `/api` value is usually enough.
-- `VITE_SENTRY_ENABLED`
-  Leave this unset or `false` locally. Only set it to `true` for preview and
-  production deployments.
+In local development it uses `/api`, and the Vite dev server proxies those
+requests to `http://127.0.0.1:4200`.
 
 ## Verification
 

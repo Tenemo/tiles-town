@@ -26,12 +26,11 @@ rewritten to TypeScript and now maintained as a pnpm + Turbo monorepo.
 
 - [apps/api/README.md](./apps/api/README.md) for API workspace usage and runtime
   configuration
-- [apps/web/README.md](./apps/web/README.md) for frontend workspace usage and
-  deployment notes
+- [apps/web/README.md](./apps/web/README.md) for frontend workspace usage
 - [docs/endpoints.md](./docs/endpoints.md) for route behavior and payload
   expectations
-- [docs/operations.md](./docs/operations.md) for local reset, verification,
-  CI, and deployment workflows
+- [docs/operations.md](./docs/operations.md) for local reset, verification, and
+  CI workflows
 
 ## Development
 
@@ -68,8 +67,8 @@ If you want to run the host-based API fallback, copy `.env.example` or
 `apps/api/.env.sample` to a local `.env` file first.
 
 Sentry stays disabled in local development and end-to-end runs. Only enable
-`SENTRY_ENABLED=true` and `VITE_SENTRY_ENABLED=true` in preview or production
-deployment environments.
+`SENTRY_ENABLED=true` and `VITE_SENTRY_ENABLED=true` outside local development
+and automated tests.
 
 ## Verification
 
@@ -89,19 +88,3 @@ The API integration tests expect Postgres to be available on `127.0.0.1:5434`.
 The default `pnpm run dev` and `pnpm run docker:up` flows already provide that.
 The browser tests also fail on unexpected console errors, page errors, and
 failing `/api` responses.
-
-## Deployment
-
-- Netlify uses the repository root `netlify.toml` and publishes `apps/web/dist`.
-- Set `VITE_API_BASE_URL` in Netlify to the public API origin, including `/api`
-  when appropriate.
-- Only set `VITE_SENTRY_ENABLED=true` on preview and production deploys.
-- Railway uses the repository root `railway.toml`, builds from the monorepo
-  root, runs the built API migration script before start, and serves the API
-  health check from `/api/health-check`.
-- Only set `SENTRY_ENABLED=true` on preview and production deploys.
-- GitHub Actions runs the full verification surface from
-  `.github/workflows/ci.yml`, including a smoke check against the built API
-  container.
-- `.github/workflows/api-artifact.yml` publishes a deployable API artifact when
-  API-facing files change on `master`.

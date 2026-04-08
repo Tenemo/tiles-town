@@ -5,11 +5,29 @@ import { router } from './routes/router';
 import { config } from './config';
 import { logger, setupLogging } from './logging';
 
+const productionOrigins = new Set(['https://tiles.town']);
 const allowlistedOrigins = new Set([
-    ...config.corsAllowedOrigins,
     'http://127.0.0.1:3200',
     'http://localhost:3200',
+    ...productionOrigins,
 ]);
+
+const isNetlifyDeployOrigin = (origin: string): boolean => {
+    try {
+        const parsedOrigin = new URL(origin);
+
+        if (parsedOrigin.protocol !== 'https:') {
+            return false;
+        }
+
+        return (
+            parsedOrigin.hostname === 'tiles-town.netlify.app' ||
+            parsedOrigin.hostname.endsWith('--tiles-town.netlify.app')
+        );
+    } catch {
+        return false;
+    }
+};
 
 export const app = express();
 
@@ -22,6 +40,11 @@ app.use(
             }
 
             if (allowlistedOrigins.has(origin)) {
+                callback(null, true);
+                return;
+            }
+
+            if (isNetlifyDeployOrigin(origin)) {
                 callback(null, true);
                 return;
             }

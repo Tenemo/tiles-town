@@ -7,6 +7,7 @@
     "scripts": {
         "clean": "pnpm exec rimraf dist",
         "build": "pnpm run clean && tsc --project tsconfig.json",
+        "build:deps": "tsc --project tsconfig.json",
         "eslint": "pnpm --dir ../.. exec eslint packages/game-core/src packages/game-core/vitest.config.ts",
         "eslint:fix": "pnpm --dir ../.. exec eslint packages/game-core/src packages/game-core/vitest.config.ts --fix",
         "lint": "pnpm run eslint",

@@ -17,7 +17,7 @@
     },
     "scripts": {
         "start": "node dist/start-server.js",
-        "build": "pnpm --filter @tiles-town/contracts run build && pnpm --filter @tiles-town/game-core run build && pnpm run clean && tsc --project tsconfig.build.json",
+        "build": "pnpm --filter @tiles-town/contracts run build:deps && pnpm --filter @tiles-town/game-core run build:deps && pnpm run clean && tsc --project tsconfig.build.json",
         "clean": "pnpm exec rimraf dist",
         "cleanDist": "pnpm run clean",
         "db:migrate": "ts-node --transpile-only src/scripts/migrate-db.ts",
@@ -30,7 +30,7 @@
         "lint": "pnpm run eslint",
         "tsc": "tsc",
         "typecheck": "pnpm run tsc",
-        "test": "pnpm --filter @tiles-town/contracts run build && pnpm --filter @tiles-town/game-core run build && pnpm --filter @tiles-town/testkit run build && cross-env NODE_ENV=test vitest run --reporter verbose",
+        "test": "pnpm --filter @tiles-town/contracts run build:deps && pnpm --filter @tiles-town/testkit run build && cross-env NODE_ENV=test vitest run --reporter verbose",
         "test:coverage": "pnpm run test -- --coverage",
         "test:watch": "cross-env NODE_ENV=test vitest"
     },

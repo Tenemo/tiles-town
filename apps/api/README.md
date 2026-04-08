@@ -36,11 +36,9 @@ The API configuration is centralized in `src/config.ts`.
 
 - `DATABASE_URL` should point to PostgreSQL and defaults through `.env.example`
 - `DATABASE_SSL` defaults to `true` and should be set to `false` locally
-- `CORS_ALLOWED_ORIGINS` accepts a comma-separated allowlist for non-local
-  frontend origins
 - `PORT` defaults to `4200`
-- `SENTRY_ENABLED` should stay disabled locally and only be enabled for preview
-  or production deploys
+- `SENTRY_ENABLED` should stay disabled locally and only be enabled outside
+  local development when needed
 
 `GET /api/health-check` returns plain text `OK`.
 See [docs/endpoints.md](../../docs/endpoints.md) for the route contract and

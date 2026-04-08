@@ -1,4 +1,5 @@
 import { Static, Type } from '@sinclair/typebox';
+import { Value } from '@sinclair/typebox/value';
 
 export const GAME_SIZE_LIMITS = {
     min: 4,
@@ -21,6 +22,9 @@ export type HighScore = Static<typeof HighScoreSchema>;
 
 export const HighScoresResponseSchema = Type.Array(HighScoreSchema);
 export type HighScoresResponse = Static<typeof HighScoresResponseSchema>;
+export const isHighScoresResponse = (
+    value: unknown,
+): value is HighScoresResponse => Value.Check(HighScoresResponseSchema, value);
 
 export const MessageResponseSchema = Type.Object({
     message: Type.String(),
@@ -62,6 +66,8 @@ export const NewGameResponseSchema = Type.Object({
     }),
 });
 export type NewGameResponse = Static<typeof NewGameResponseSchema>;
+export const isNewGameResponse = (value: unknown): value is NewGameResponse =>
+    Value.Check(NewGameResponseSchema, value);
 
 export const WinGameParamsSchema = Type.Object({
     id: GameIdSchema,
@@ -95,3 +101,5 @@ export const WinGameResponseSchema = Type.Object({
     isSeedCustom: Type.Optional(Type.Boolean()),
 });
 export type WinGameResponse = Static<typeof WinGameResponseSchema>;
+export const isWinGameResponse = (value: unknown): value is WinGameResponse =>
+    Value.Check(WinGameResponseSchema, value);
