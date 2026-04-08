@@ -166,7 +166,8 @@ export const newGame =
         seed: string,
         previousId: string,
     ): AppThunk<Promise<void>> =>
-    async (dispatch): Promise<void> => {
+    async (dispatch, getState): Promise<void> => {
+        const wasBoardDisabled = getGame(getState()).isDisabled;
         dispatch(lockBoard());
         dispatch(beginRequest());
         try {
@@ -193,6 +194,9 @@ export const newGame =
             setTimeout(() => dispatch(unlockBoard()), 20);
         } catch (error) {
             dispatch(requestError());
+            if (!wasBoardDisabled) {
+                dispatch(unlockBoard());
+            }
             toast.error(
                 `Couldn't load a new game.\n${getRequestErrorMessage(error)}`,
             );
