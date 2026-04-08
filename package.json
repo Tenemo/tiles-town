@@ -9,8 +9,11 @@
     "dev": "pnpm --filter @tiles-town/contracts run build && pnpm run docker:up && pnpm --filter @tiles-town/web run dev",
     "dev:web": "pnpm --filter @tiles-town/contracts run build && pnpm --filter @tiles-town/web run dev",
     "dev:api": "pnpm --filter @tiles-town/api run dev",
+    "prebuild": "pnpm run tsc && pnpm run lint && pnpm run test",
     "build": "turbo run build",
+    "clean": "turbo run clean && pnpm exec rimraf .turbo test-results",
     "lint": "pnpm run eslint && pnpm run stylelint",
+    "local:reset": "pnpm run docker:refresh",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "tsc": "pnpm run typecheck",
@@ -19,11 +22,13 @@
     "docker:up": "docker compose up -d --build --wait",
     "docker:destroy": "docker compose down -v",
     "docker:refresh": "pnpm run docker:destroy && pnpm run docker:up",
-    "e2e": "pnpm --filter @tiles-town/contracts run build && playwright test",
-    "e2e:install": "playwright install",
+    "e2e": "pnpm --filter @tiles-town/contracts run build && pnpm --filter @tiles-town/testkit run build && playwright test",
+    "e2e:install": "playwright install --with-deps",
     "prepare": "husky"
   },
   "devDependencies": {
+    "@tiles-town/contracts": "workspace:*",
+    "@tiles-town/testkit": "workspace:*",
     "@eslint/js": "^9.39.4",
     "@types/node": "^25.5.2",
     "@playwright/test": "^1.59.1",
@@ -41,6 +46,7 @@
     "globals": "^17.4.0",
     "husky": "^9.1.7",
     "prettier": "^3.8.1",
+    "rimraf": "^6.1.3",
     "turbo": "^2.9.4"
   },
   "pnpm": {

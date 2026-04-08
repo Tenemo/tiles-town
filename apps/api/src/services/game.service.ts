@@ -13,9 +13,9 @@ import { GAME_CONFIG } from '../config';
 import { randBetween } from '../utils/helpers';
 import { logger } from '../logging';
 
-import { generateBoard } from '../controllers/game/generateBoard';
-import { checkMoves } from '../controllers/game/checkMoves';
-import { calculateScore } from '../controllers/game/score';
+import { generateBoard } from '../domain/game/generateBoard';
+import { checkMoves } from '../domain/game/checkMoves';
+import { calculateScore } from '../domain/game/score';
 
 type GameCompletionResult = {
     body: WinGameResponse;
@@ -184,7 +184,7 @@ export const fetchHighScores = async (): Promise<HighScore[]> => {
 };
 
 export const updateScores = async (): Promise<string> => {
-    const result = await Game.findAll({
+    const games = await Game.findAll({
         where: {
             game_isWon: true,
             game_isSeedCustom: false,
@@ -192,15 +192,7 @@ export const updateScores = async (): Promise<string> => {
         },
     });
 
-    for (const element of result) {
-        const game = await Game.findOne({
-            where: { game_id: element.game_id },
-        });
-
-        if (!game) {
-            continue;
-        }
-
+    for (const game of games) {
         const oldScore = game.game_score;
         const newScore = calculateScore(game);
         if (newScore === null) {
@@ -210,13 +202,13 @@ export const updateScores = async (): Promise<string> => {
 
         await game.save();
         logger.info(
-            `Updated ${element.game_id}'s score from ${
+            `Updated ${game.game_id}'s score from ${
                 oldScore?.toString() ?? ''
             } to ${game.game_score?.toString() ?? ''}`,
         );
     }
 
-    return `Updated score in ${result.length} rows`;
+    return `Updated score in ${games.length} rows`;
 };
 
 export const generateFakeData = async (): Promise<string> => {

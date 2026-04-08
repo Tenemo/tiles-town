@@ -17,6 +17,8 @@ rewritten to TypeScript and now maintained as a pnpm + Turbo monorepo.
 - `apps/api` contains the Express API.
 - `packages/contracts` contains shared runtime schemas, route constants, and
   TypeScript types.
+- `packages/testkit` contains shared board-solving helpers for integration and
+  end-to-end tests.
 - `tests/e2e` contains Playwright end-to-end coverage.
 
 ## Repository docs
@@ -51,6 +53,9 @@ serves the frontend directly through Vite.
 Useful commands:
 
 ```bash
+pnpm run build
+pnpm run clean
+pnpm run local:reset
 pnpm run docker:up
 pnpm run docker:destroy
 pnpm run docker:refresh
@@ -70,6 +75,7 @@ deployment environments.
 Run the shared checks from the repository root:
 
 ```bash
+pnpm run build
 pnpm run tsc
 pnpm run eslint
 pnpm run stylelint
@@ -96,3 +102,5 @@ failing `/api` responses.
 - GitHub Actions runs the full verification surface from
   `.github/workflows/ci.yml`, including a smoke check against the built API
   container.
+- `.github/workflows/api-artifact.yml` publishes a deployable API artifact when
+  API-facing files change on `master`.

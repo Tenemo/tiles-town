@@ -1,6 +1,5 @@
 import * as Sentry from '@sentry/react';
 import { createRoot } from 'react-dom/client';
-import 'bootstrap/dist/js/bootstrap.min';
 
 import Root from 'components/Root';
 

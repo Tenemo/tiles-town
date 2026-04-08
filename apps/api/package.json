@@ -17,8 +17,9 @@
     },
     "scripts": {
         "start": "node dist/start-server.js",
-        "build": "pnpm --filter @tiles-town/contracts run build && pnpm run cleanDist && tsc --project tsconfig.build.json",
-        "cleanDist": "node -e \"const fs=require('fs'); fs.rmSync('dist',{recursive:true,force:true}); fs.mkdirSync('dist',{recursive:true});\"",
+        "build": "pnpm --filter @tiles-town/contracts run build && pnpm run clean && tsc --project tsconfig.build.json",
+        "clean": "pnpm exec rimraf dist",
+        "cleanDist": "pnpm run clean",
         "db:migrate": "ts-node --transpile-only src/scripts/migrate-db.ts",
         "db:migrate:dist": "node dist/scripts/migrate-db.js",
         "dev": "pnpm run db:migrate && nodemon",
@@ -29,7 +30,7 @@
         "lint": "pnpm run eslint",
         "tsc": "tsc",
         "typecheck": "pnpm run tsc",
-        "test": "pnpm --filter @tiles-town/contracts run build && cross-env NODE_ENV=test vitest run --reporter verbose",
+        "test": "pnpm --filter @tiles-town/contracts run build && pnpm --filter @tiles-town/testkit run build && cross-env NODE_ENV=test vitest run --reporter verbose",
         "test:coverage": "pnpm run test -- --coverage",
         "test:watch": "cross-env NODE_ENV=test vitest"
     },
@@ -61,6 +62,7 @@
         "winston-daily-rotate-file": "^5.0.0"
     },
     "devDependencies": {
+        "@tiles-town/testkit": "workspace:*",
         "@types/cookie-parser": "^1.4.10",
         "@types/cors": "^2.8.19",
         "@types/express": "^5.0.6",

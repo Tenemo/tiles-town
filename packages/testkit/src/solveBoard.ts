@@ -9,7 +9,7 @@ const isPlayable = (tile: number): boolean => tile === 0 || tile === 1;
 
 const intToLetter = (numberInput: number): string => {
     const base = ALPHABET.length;
-    const digits = [];
+    const digits: number[] = [];
     let leftover = numberInput + 1;
 
     do {

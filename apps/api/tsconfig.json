@@ -12,7 +12,8 @@
         "noErrorTruncation": true,
         "types": ["node", "vitest/globals"],
         "paths": {
-            "@tiles-town/contracts": ["../../packages/contracts/src/index.ts"]
+            "@tiles-town/contracts": ["../../packages/contracts/src/index.ts"],
+            "@tiles-town/testkit": ["../../packages/testkit/src/index.ts"]
         }
     },
     "include": [

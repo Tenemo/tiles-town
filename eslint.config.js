@@ -46,6 +46,8 @@ const importSettings = {
                 './apps/web/tsconfig.json',
                 './apps/api/tsconfig.json',
                 './packages/contracts/tsconfig.json',
+                './packages/testkit/tsconfig.json',
+                './tsconfig.eslint.json',
             ],
         },
     },
@@ -274,6 +276,10 @@ module.exports = [
     createTypeScriptConfig({
         files: ['packages/contracts/**/*.ts'],
         packageDir: path.join(__dirname, 'packages/contracts'),
+    }),
+    createTypeScriptConfig({
+        files: ['packages/testkit/**/*.ts'],
+        packageDir: path.join(__dirname, 'packages/testkit'),
     }),
     createTypeScriptConfig({
         files: ['tests/**/*.ts', 'playwright.config.ts'],

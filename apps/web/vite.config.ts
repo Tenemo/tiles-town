@@ -62,12 +62,16 @@ export default defineConfig({
                         return 'sentry';
                     }
 
-                    if (
-                        id.includes('react') ||
-                        id.includes('redux') ||
-                        id.includes('history')
-                    ) {
-                        return 'react-vendor';
+                    if (id.includes('react-router') || id.includes('history')) {
+                        return 'router-vendor';
+                    }
+
+                    if (id.includes('redux') || id.includes('reselect')) {
+                        return 'state-vendor';
+                    }
+
+                    if (id.includes('react-dom') || id.includes('/react/')) {
+                        return 'react-core';
                     }
 
                     return 'vendor';

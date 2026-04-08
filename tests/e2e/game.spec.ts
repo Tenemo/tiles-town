@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
 import { GAME_ROUTES, type NewGameResponse } from '@tiles-town/contracts';
-import { solveBoard } from '../support/solveBoard';
+import { solveBoard } from '@tiles-town/testkit';
 import { createBrowserErrorTracker } from './support/errorTracking';
 
-test.describe('Tiles Town', () => {
+test.describe('tiles town', () => {
     test('loads the game and starts a new board', async ({ page }) => {
         const errorTracker = createBrowserErrorTracker();
         errorTracker.attachToPage(page, 'game-start');

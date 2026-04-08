@@ -20,17 +20,19 @@ env:
     FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-    tsc:
+    lint:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
 
-            - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@v5
               with:
                   version: 10.33.0
 
-            - uses: actions/setup-node@v4
+            - uses: actions/setup-node@v6
               with:
                   node-version-file: '.nvmrc'
                   cache: pnpm
@@ -38,52 +40,33 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
-            - name: Run tsc
+            - name: Run lint
+              run: pnpm run lint
+
+    typecheck:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
+
+            - uses: pnpm/action-setup@v5
+              with:
+                  version: 10.33.0
+
+            - uses: actions/setup-node@v6
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: pnpm
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Run typecheck
               run: pnpm run tsc
 
-    eslint:
-        runs-on: ubuntu-latest
-
-        steps:
-            - uses: actions/checkout@v4
-
-            - uses: pnpm/action-setup@v4
-              with:
-                  version: 10.33.0
-
-            - uses: actions/setup-node@v4
-              with:
-                  node-version-file: '.nvmrc'
-                  cache: pnpm
-
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
-
-            - name: Run eslint
-              run: pnpm run eslint
-
-    stylelint:
-        runs-on: ubuntu-latest
-
-        steps:
-            - uses: actions/checkout@v4
-
-            - uses: pnpm/action-setup@v4
-              with:
-                  version: 10.33.0
-
-            - uses: actions/setup-node@v4
-              with:
-                  node-version-file: '.nvmrc'
-                  cache: pnpm
-
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
-
-            - name: Run stylelint
-              run: pnpm run stylelint
-
-    test:
+    api-test:
         runs-on: ubuntu-latest
 
         services:
@@ -109,13 +92,15 @@ jobs:
             PORT: 4200
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
 
-            - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@v5
               with:
                   version: 10.33.0
 
-            - uses: actions/setup-node@v4
+            - uses: actions/setup-node@v6
               with:
                   node-version-file: '.nvmrc'
                   cache: pnpm
@@ -123,20 +108,45 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
-            - name: Run tests
-              run: pnpm run test
+            - name: Run API tests
+              run: pnpm --filter @tiles-town/api test
+
+    web-test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
+
+            - uses: pnpm/action-setup@v5
+              with:
+                  version: 10.33.0
+
+            - uses: actions/setup-node@v6
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: pnpm
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Run web tests
+              run: pnpm --filter @tiles-town/web test
 
     build:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
 
-            - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@v5
               with:
                   version: 10.33.0
 
-            - uses: actions/setup-node@v4
+            - uses: actions/setup-node@v6
               with:
                   node-version-file: '.nvmrc'
                   cache: pnpm
@@ -151,13 +161,15 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
 
-            - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@v5
               with:
                   version: 10.33.0
 
-            - uses: actions/setup-node@v4
+            - uses: actions/setup-node@v6
               with:
                   node-version-file: '.nvmrc'
                   cache: pnpm
@@ -175,13 +187,15 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
 
-            - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@v5
               with:
                   version: 10.33.0
 
-            - uses: actions/setup-node@v4
+            - uses: actions/setup-node@v6
               with:
                   node-version-file: '.nvmrc'
                   cache: pnpm
@@ -190,7 +204,7 @@ jobs:
               run: pnpm install --frozen-lockfile
 
             - name: Install Playwright browsers
-              run: pnpm exec playwright install --with-deps chromium
+              run: pnpm run e2e:install
 
             - name: Run browser e2e
               run: pnpm run e2e

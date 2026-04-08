@@ -1,5 +1,5 @@
 import { Express } from 'express';
-import { solveBoard } from '../../../../tests/support/solveBoard';
+import { solveBoard } from '@tiles-town/testkit';
 import {
     createGame,
     fetchHealthCheck,
