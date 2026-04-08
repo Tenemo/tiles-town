@@ -45,10 +45,3 @@ pnpm run test
 pnpm run build
 pnpm run e2e
 ```
-
-## Deployment
-
-Netlify should use the repository root as the base directory and rely on the
-root `netlify.toml` file. Set `VITE_API_BASE_URL` to the public API origin for
-production deploys, and only set `VITE_SENTRY_ENABLED=true` for preview and
-production environments.
