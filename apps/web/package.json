@@ -13,9 +13,9 @@
     },
     "homepage": "https://github.com/Tenemo/tiles-town#readme",
     "scripts": {
-        "dev": "pnpm --filter @tiles-town/contracts run build && vite",
-        "start": "pnpm --filter @tiles-town/contracts run build && vite",
-        "build": "pnpm --filter @tiles-town/contracts run build && tsc --noEmit && vite build",
+        "dev": "pnpm --filter @tiles-town/contracts run build:deps && vite",
+        "start": "pnpm --filter @tiles-town/contracts run build:deps && vite",
+        "build": "pnpm --filter @tiles-town/contracts run build:deps && tsc --noEmit && vite build",
         "clean": "pnpm exec rimraf dist",
         "preview": "vite preview",
         "eslint": "pnpm --dir ../.. exec eslint apps/web/src apps/web/config apps/web/vite.config.ts",
@@ -25,7 +25,7 @@
         "lint": "pnpm run eslint && pnpm run stylelint",
         "tsc": "tsc --noEmit",
         "typecheck": "tsc --noEmit",
-        "test": "pnpm --filter @tiles-town/contracts run build && vitest run",
+        "test": "pnpm --filter @tiles-town/contracts run build:deps && vitest run",
         "test:update": "vitest run --update",
         "test:coverage": "vitest run --coverage",
         "test:watch": "vitest"

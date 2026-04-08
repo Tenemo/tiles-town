@@ -3,6 +3,9 @@ import {
     type HighScore,
     type NewGameResponse,
     type WinGameResponse,
+    isHighScoresResponse,
+    isNewGameResponse,
+    isWinGameResponse,
 } from '@tiles-town/contracts';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -64,6 +67,64 @@ const getRequestErrorMessage = (error: unknown): string => {
     return String(error);
 };
 
+const describeUnexpectedResponse = (value: unknown): string => {
+    if (
+        typeof value === 'string' &&
+        /<(?:!doctype|html|head|body)\b/i.test(value)
+    ) {
+        return 'Received HTML instead of JSON. Check VITE_API_BASE_URL or deployed /api routing.';
+    }
+
+    if (Array.isArray(value)) {
+        return 'Received an array in an unexpected format.';
+    }
+
+    if (value && typeof value === 'object') {
+        const keys = Object.keys(value as Record<string, unknown>);
+        return keys.length
+            ? `Received an object with keys: ${keys.join(', ')}.`
+            : 'Received an empty object.';
+    }
+
+    return `Received ${typeof value}.`;
+};
+
+const assertHighScoresResponse = (value: unknown): HighScore[] => {
+    if (!isHighScoresResponse(value)) {
+        throw new Error(
+            `Unexpected server response while loading high scores. ${describeUnexpectedResponse(
+                value,
+            )}`,
+        );
+    }
+
+    return value;
+};
+
+const assertNewGameResponse = (value: unknown): NewGameResponse => {
+    if (!isNewGameResponse(value)) {
+        throw new Error(
+            `Unexpected server response while loading a new game. ${describeUnexpectedResponse(
+                value,
+            )}`,
+        );
+    }
+
+    return value;
+};
+
+const assertWinGameResponse = (value: unknown): WinGameResponse => {
+    if (!isWinGameResponse(value)) {
+        throw new Error(
+            `Unexpected server response while saving the completed game. ${describeUnexpectedResponse(
+                value,
+            )}`,
+        );
+    }
+
+    return value;
+};
+
 export {
     beginRequest,
     lockBoard,
@@ -85,7 +146,7 @@ export const getHighScores =
             const response = await request.get<HighScore[]>(
                 GAME_ROUTES.highScores,
             );
-            dispatch(setHighScores(response.data));
+            dispatch(setHighScores(assertHighScoresResponse(response.data)));
             dispatch(requestSuccess());
         } catch (error) {
             dispatch(requestError());
@@ -121,11 +182,12 @@ export const newGame =
                     timeout: 5000,
                 },
             );
+            const game = assertNewGameResponse(response.data);
             toast.success('New game loaded!', {
                 autoClose: 1000,
                 closeButton: false,
             });
-            dispatch(replaceGame(response.data));
+            dispatch(replaceGame(game));
             dispatch(requestSuccess());
             // Wait for the rendered board to settle so the next click does not skip animations.
             setTimeout(() => dispatch(unlockBoard()), 20);
@@ -154,7 +216,7 @@ export const winGame =
                     timeout: 20000,
                 },
             );
-            const receivedGame = response.data;
+            const receivedGame = assertWinGameResponse(response.data);
             const successMessage =
                 typeof receivedGame.score === 'number'
                     ? `Total score: ${receivedGame.score}. Great job!`
