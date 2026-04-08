@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+        <title>Flip'Em</title>
+
+        <!-- STYLESHEETS -->
+        <link href="styles.css" rel="stylesheet">
+
+        <!--FAVICON-->
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+        <!--META-->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8">
+
+    </head>
+
+    <body>
+
+        <!--MAIN HEADER-->
+        <header>
+            Flip'Em
+            <!--HAX-->
+            <button type="button" id="hax" class="btn" style="background-color: #555;">instawin hax</button>
+            <button type="button" id="nextStep" class="btn" style="background-color: #555;">GENERATE STEP BY STEP</button><br>
+            <!--HAX-->
+        </header>
+
+        <!--NAVIGATION-->
+        <nav>
+            <label>Board size: </label>
+            <select id="sizeMain" class="sizeDropdown">
+            </select><br>
+            <button type="button" id="start" class="btnWhite btn">Start!</button>
+            <div class="error" id="errorStart"></div>
+        </nav>
+
+        <!--SECTION-->
+        <section>
+            <div id="gameContainer">
+            </div>
+        </section>
+
+        <!--SIDE PANEL-->
+        <aside>
+            <button type="button" id="clear" class="btn">Clear</button><br>
+            Your time: <div id="timer"></div>
+        </aside>
+
+        <!--FOOTER-->
+        <footer>
+            <form id="nickForm">
+                Enter your nick to appear on high score list: <br>
+                <input
+                    type="text"
+                    id="nick"
+                    maxlength="32">
+                <input id="end" type="button" value="Akceptuj" class="btn">
+                <div class="error" id="errorEnd"></div>
+            </form>
+            <button type="submit" id="restart" class="btn">Play again</button>
+            <br><h2>High scores</h2>
+            <label>Board size: </label>
+            <select class="sizeDropdown" id="tableDropdown">
+            </select>
+            <table id="scoreboard">
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Player Name
+                    </th>
+                    <th>
+                        Board
+                    </th>
+                    <th>
+                        Time
+                    </th>
+                    <th>
+                        Move count
+                    </th>
+                </tr>
+            </table>
+            <button type="button" id="clearData" class="btn">Reset high scores</button>
+        </footer>
+
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+        <script type="text/javascript" async src="custom.js"></script>
+    </body>
+
+</html>

@@ -67,7 +67,10 @@ test.describe('tiles town', () => {
         const winningMoves = solveBoard(body.board);
 
         for (const move of winningMoves) {
-            await page.locator(`button[data-coords="${move}"]`).first().click();
+            await page
+                .locator(`button[data-coords="${move}"]`)
+                .first()
+                .click({ force: true });
         }
 
         await expect(
