@@ -10,3 +10,5 @@ packages/contracts/src/*.js
 packages/contracts/src/*.js.map
 packages/contracts/src/*.d.ts
 packages/contracts/src/*.d.ts.map
+temp.txt
+temp/
